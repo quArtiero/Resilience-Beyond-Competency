@@ -101,6 +101,28 @@ export interface AdminDashboardStats {
   completion_rate: number
 }
 
+export interface Reflection {
+  id: number
+  lesson_id: number
+  content: string
+  word_count: number
+  created_at: string
+  updated_at: string
+}
+
+export interface ReflectionCreate {
+  lesson_id: number
+  content: string
+}
+
+export interface ReflectionAnalytics {
+  total_reflections: number
+  total_words: number
+  average_words_per_reflection: number
+  most_recent_reflection: string | null
+  longest_reflection_words: number
+}
+
 // API functions
 export const api = {
   // Auth endpoints
@@ -158,5 +180,33 @@ export const api = {
 
   deleteUser: async (userId: number): Promise<void> => {
     await apiClient.delete(`/admin/users/${userId}`)
+  },
+
+  // Reflection endpoints
+  saveReflection: async (lessonId: number, content: string): Promise<Reflection> => {
+    const response = await apiClient.post(`/lessons/${lessonId}/reflection`, {
+      lesson_id: lessonId,
+      content: content
+    })
+    return response.data
+  },
+
+  getReflection: async (lessonId: number): Promise<Reflection> => {
+    const response = await apiClient.get(`/lessons/${lessonId}/reflection`)
+    return response.data
+  },
+
+  getAllReflections: async (): Promise<Reflection[]> => {
+    const response = await apiClient.get('/reflections')
+    return response.data
+  },
+
+  deleteReflection: async (lessonId: number): Promise<void> => {
+    await apiClient.delete(`/lessons/${lessonId}/reflection`)
+  },
+
+  getReflectionAnalytics: async (): Promise<ReflectionAnalytics> => {
+    const response = await apiClient.get('/reflection-analytics')
+    return response.data
   },
 } 

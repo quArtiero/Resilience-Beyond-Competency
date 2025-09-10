@@ -58,16 +58,17 @@ class LessonCompletion(SQLModel, table=True):
     lesson: Lesson = Relationship(back_populates="completions")
 
 
-class Reflection(SQLModel, table=True):
-    """Store user reflections for lessons."""
-    id: Optional[int] = Field(default=None, primary_key=True)
-    user_id: int = Field(foreign_key="user.id")
-    lesson_id: int = Field(foreign_key="lesson.id")
-    content: str = Field(description="Rich text content of the reflection")
-    word_count: int = Field(default=0, description="Word count for analytics")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    # Relationships
-    user: User = Relationship()
-    lesson: Lesson = Relationship() 
+# Reflection model temporarily disabled for login fix
+# class Reflection(SQLModel, table=True):
+#     """Store user reflections for lessons."""
+#     id: Optional[int] = Field(default=None, primary_key=True)
+#     user_id: int = Field(foreign_key="user.id")
+#     lesson_id: int = Field(foreign_key="lesson.id")
+#     content: str = Field(description="Rich text content of the reflection")
+#     word_count: int = Field(default=0, description="Word count for analytics")
+#     created_at: datetime = Field(default_factory=datetime.utcnow)
+#     updated_at: datetime = Field(default_factory=datetime.utcnow)
+#     
+#     # Relationships
+#     user: User = Relationship()
+#     lesson: Lesson = Relationship() 

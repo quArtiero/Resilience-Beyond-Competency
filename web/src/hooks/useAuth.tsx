@@ -38,7 +38,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     queryKey: ['currentUser'],
     queryFn: api.getCurrentUser,
     enabled: isInitialized && hasToken(),
-    retry: false,
+    retry: 1,  // Retry once if token is valid but request fails
+    staleTime: 1000 * 60 * 5,  // 5 minutes - don't refetch too aggressively
+    cacheTime: 1000 * 60 * 30, // 30 minutes - keep in cache longer
   })
 
   // Initialize auth state on mount
@@ -54,13 +56,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [currentUser])
 
-  // Check for stored user on mount
+  // Check for stored user on mount - run once on initialization
   useEffect(() => {
-    const storedUser = localStorage.getItem('user')
-    if (storedUser && !user) {
-      setUser(JSON.parse(storedUser))
+    if (isInitialized && !user) {
+      const storedUser = localStorage.getItem('user')
+      const storedToken = localStorage.getItem('access_token')
+      
+      if (storedUser && storedToken) {
+        try {
+          const parsedUser = JSON.parse(storedUser)
+          console.log('Restoring user from localStorage:', parsedUser.username)
+          setUser(parsedUser)
+        } catch (error) {
+          console.error('Error parsing stored user:', error)
+          // Clear invalid stored data
+          localStorage.removeItem('user')
+          localStorage.removeItem('access_token')
+        }
+      }
     }
-  }, [user])
+  }, [isInitialized, user])
 
   const loginMutation = useMutation({
     mutationFn: api.login,

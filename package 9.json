@@ -1,0 +1,48 @@
+{
+  "name": "resilient-mastery",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Emotional Intelligence and Resilience Learning Platform",
+  "scripts": {
+    "dev": "docker-compose up --build",
+    "dev:api": "cd api && uvicorn app.main:app --reload",
+    "dev:web": "cd web && npm run dev",
+    "build": "docker-compose build",
+    "test": "cd api && python -m pytest && cd ../web && npm test",
+    "lint": "cd api && black . && isort . && cd ../web && npm run lint:fix",
+    "format": "cd api && black . && isort . && cd ../web && npx prettier --write .",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2"
+  },
+  "lint-staged": {
+    "api/**/*.py": [
+      "black",
+      "isort",
+      "flake8"
+    ],
+    "web/**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "web/**/*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/resilient-mastery.git"
+  },
+  "keywords": [
+    "emotional-intelligence",
+    "resilience",
+    "learning-platform",
+    "fastapi",
+    "react",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+} 

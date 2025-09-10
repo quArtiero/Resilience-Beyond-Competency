@@ -12,6 +12,7 @@ from app.schemas import (
     LessonDetail, 
     LessonCompletionResponse, 
     ProgressResponse
+    # ReflectionCreate, ReflectionUpdate, ReflectionResponse - temporarily disabled
 )
 from app.crud import (
     get_lessons, 
@@ -21,6 +22,7 @@ from app.crud import (
     get_lessons_with_unlock_status,
     is_lesson_unlocked,
     get_user_module_progress
+    # Reflection functions will be available after container restart
 )
 
 router = APIRouter()
@@ -116,4 +118,20 @@ async def get_user_progress(
     Returns total lessons, completed count, percentage, and completed IDs.
     """
     stats = await get_lesson_completion_stats(session, current_user.id)
-    return ProgressResponse(**stats) 
+    return ProgressResponse(**stats)
+
+
+# Reflection endpoints - temporarily disabled until container restart
+# Will be enabled once the new CRUD functions are available
+
+# @router.post("/lessons/{lesson_id}/reflection", response_model=ReflectionResponse)
+# async def save_reflection(...)
+
+# @router.get("/lessons/{lesson_id}/reflection", response_model=ReflectionResponse)  
+# async def get_reflection(...)
+
+# @router.get("/reflections", response_model=List[ReflectionResponse])
+# async def get_all_reflections(...)
+
+# @router.delete("/lessons/{lesson_id}/reflection")
+# async def delete_reflection_endpoint(...) 

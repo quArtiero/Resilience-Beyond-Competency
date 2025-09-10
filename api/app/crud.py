@@ -7,6 +7,7 @@ from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import User, Lesson, LessonCompletion
+# from app.models import Reflection  # Temporarily disabled
 from app.schemas import UserCreate, LessonCreate, LessonUpdate
 from app.deps import get_password_hash
 
@@ -388,4 +389,28 @@ async def get_lessons_with_unlock_status(session: AsyncSession, user_id: int) ->
         }
         lessons_with_status.append(lesson_dict)
     
-    return lessons_with_status 
+    return lessons_with_status
+
+
+# Reflection CRUD operations - temporarily disabled to fix API startup
+# Will be re-enabled once the Reflection model is properly implemented
+
+# async def create_or_update_reflection(...):
+#     """Create a new reflection or update existing one."""
+#     pass
+
+# async def get_user_reflection(...):
+#     """Get a specific reflection for a user and lesson."""
+#     pass
+
+# async def get_user_reflections(...):
+#     """Get all reflections for a user."""
+#     pass
+
+# async def delete_reflection(...):
+#     """Delete a user's reflection for a specific lesson."""
+#     pass
+
+# async def get_reflection_analytics(...):
+#     """Get reflection analytics for a user."""
+#     pass 

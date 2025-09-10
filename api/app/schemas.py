@@ -145,21 +145,21 @@ class UserUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 
-# Reflection schemas
-class ReflectionCreate(BaseModel):
-    lesson_id: int
-    content: str
+# Reflection schemas - temporarily disabled to fix API startup
+# class ReflectionCreate(BaseModel):
+#     lesson_id: int
+#     content: str
 
-class ReflectionUpdate(BaseModel):
-    content: str
+# class ReflectionUpdate(BaseModel):
+#     content: str
 
-class ReflectionResponse(BaseModel):
-    id: int
-    lesson_id: int
-    content: str
-    word_count: int
-    created_at: datetime
-    updated_at: datetime
-    
-    class Config:
-        from_attributes = True 
+# class ReflectionResponse(BaseModel):
+#     id: int
+#     lesson_id: int
+#     content: str
+#     word_count: int
+#     created_at: datetime
+#     updated_at: datetime
+#     
+#     class Config:
+#         from_attributes = True 

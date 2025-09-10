@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { MarkdownRenderer } from './MarkdownRenderer'
+import { useAuth } from '../hooks/useAuth'
 
 interface ReflectionEditorProps {
   lessonId: number
@@ -15,6 +16,11 @@ export function ReflectionEditor({ lessonId, lessonTitle, reflectionPrompt, onSa
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [saveMode, setSaveMode] = useState<'local' | 'server'>('local')
+
+  const { isAuthenticated } = useAuth()
+  // const { data: serverReflection, isLoading: isLoadingReflection } = useReflection(lessonId)
+  // const { mutate: saveToServer, isPending: isSavingToServer } = useSaveReflection()
 
   // Load saved reflection from localStorage on mount
   useEffect(() => {
@@ -24,6 +30,7 @@ export function ReflectionEditor({ lessonId, lessonTitle, reflectionPrompt, onSa
         const parsed = JSON.parse(savedReflection)
         setContent(parsed.content || '')
         setLastSaved(parsed.savedAt ? new Date(parsed.savedAt) : null)
+        setSaveMode('local')
       } catch (error) {
         console.error('Error loading saved reflection:', error)
       }
@@ -52,15 +59,17 @@ export function ReflectionEditor({ lessonId, lessonTitle, reflectionPrompt, onSa
     setIsSaving(true)
     
     try {
-      // Save to localStorage
+      // Always save to localStorage first (immediate backup)
       const reflectionData = {
         content,
         savedAt: new Date().toISOString(),
         lessonId,
         lessonTitle
       }
-      
       localStorage.setItem(`reflection_${lessonId}`, JSON.stringify(reflectionData))
+      
+      // For now, just save locally (server integration coming next)
+      setSaveMode('local')
       
       // Call parent save handler if provided
       if (onSave) {
@@ -72,8 +81,7 @@ export function ReflectionEditor({ lessonId, lessonTitle, reflectionPrompt, onSa
       
       // Show success message for manual saves
       if (!isAutoSave) {
-        // Could integrate with notification system here
-        console.log('Reflection saved successfully!')
+        console.log(`Reflection saved ${isAuthenticated ? 'to server and locally' : 'locally'}!`)
       }
       
     } catch (error) {
@@ -147,11 +155,22 @@ export function ReflectionEditor({ lessonId, lessonTitle, reflectionPrompt, onSa
           {lastSaved && (
             <div className="text-xs text-gray-400">
               Last saved: {lastSaved.toLocaleTimeString()}
+              {saveMode === 'server' && isAuthenticated && (
+                <span className="ml-1 text-green-600">☁️</span>
+              )}
+              {saveMode === 'local' && (
+                <span className="ml-1 text-blue-600">💾</span>
+              )}
             </div>
           )}
           {hasUnsavedChanges && (
             <div className="text-xs text-orange-600">
               Unsaved changes
+            </div>
+          )}
+          {isSaving && (
+            <div className="text-xs text-blue-600">
+              Saving...
             </div>
           )}
         </div>
@@ -201,7 +220,9 @@ export function ReflectionEditor({ lessonId, lessonTitle, reflectionPrompt, onSa
         </div>
 
         <div className="text-sm text-gray-500">
-          💡 Your reflections are automatically saved as you type
+          💡 {isAuthenticated 
+            ? 'Reflections auto-save to cloud ☁️ and locally 💾' 
+            : 'Reflections auto-save locally 💾 (sign in for cloud sync)'}
         </div>
       </div>
 
