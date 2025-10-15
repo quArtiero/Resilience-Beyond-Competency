@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api, User, LoginData, RegisterData } from '../api/client'
 import { useNotifications } from '../components/NotificationSystem'
@@ -106,7 +106,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       addNotification({
         type: 'error',
         title: 'Sign in failed',
-        message: error.response?.data?.detail || 'Please check your credentials and try again'
+        message: (error as any).response?.data?.detail || 'Please check your credentials and try again'
       })
     }
   })
@@ -128,7 +128,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       addNotification({
         type: 'error',
         title: 'Registration failed',
-        message: error.response?.data?.detail || 'Please try again with different details'
+        message: (error as any).response?.data?.detail || 'Please try again with different details'
       })
     }
   })

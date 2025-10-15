@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { api, AdminUser, AdminDashboardStats } from '../api/client'
+import { api, AdminUser } from '../api/client'
 import { useAuth } from '../hooks/useAuth'
-import { useNotifications } from '../components/NotificationSystem'
 
 export function AdminDashboard() {
   const { user: currentUser } = useAuth()
   const queryClient = useQueryClient()
-  const { addNotification } = useNotifications()
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useLessons, useProgress } from '../hooks/useLessons'
+import { useLessons } from '../hooks/useLessons'
 import { useAuth } from '../hooks/useAuth'
 import { AuthModal } from './AuthModal'
 
@@ -9,12 +9,8 @@ export function Sidebar() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const location = useLocation()
   const { data: lessons, isLoading } = useLessons()
-  const { data: progress } = useProgress()
   const { isAuthenticated, user } = useAuth()
 
-  const isLessonCompleted = (lessonId: number) => {
-    return progress?.completed_lesson_ids.includes(lessonId) || false
-  }
 
   const isCurrentLesson = (lessonId: number) => {
     return location.pathname === `/lessons/${lessonId}`
@@ -112,10 +108,12 @@ export function Sidebar() {
               const moduleNames = {
                 1: 'Introduction to Resilience',
                 2: 'Emotional Intelligence',
-                3: 'Cognitive Flexibility', 
+                3: 'Cognitive Flexibility',
                 4: 'Grit and Perseverance',
                 5: 'Adaptability and Agility',
-                6: 'Final Reflections'
+                6: 'Problem-Solving & Decision-Making',
+                7: 'Effective Communication',
+                8: 'Continuous Learning'
               }
               
               return Object.entries(lessonsByModule || {})

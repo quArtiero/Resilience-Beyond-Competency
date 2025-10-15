@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
@@ -58,11 +57,12 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
           hr: ({node, ...props}) => (
             <hr className="my-12 border-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 rounded-full" {...props} />
           ),
-          code: ({node, inline, ...props}) => (
-            inline ? 
+          code: ({node, ...props}: any) => {
+            const inline = props.inline || false;
+            return inline ? 
               <code className="bg-gradient-to-r from-gray-100 to-blue-100 px-2 py-1 rounded-md text-sm font-mono text-gray-800 border border-gray-200" {...props} /> :
               <code className="block bg-gradient-to-br from-gray-100 to-blue-50 p-6 rounded-xl text-sm font-mono text-gray-800 overflow-x-auto border border-gray-200 shadow-sm" {...props} />
-          ),
+          },
           table: ({node, ...props}) => (
             <div className="overflow-x-auto my-8 rounded-xl shadow-lg border border-gray-200">
               <table className="min-w-full border-collapse bg-white" {...props} />

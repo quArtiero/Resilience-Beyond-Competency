@@ -1,13 +1,15 @@
 import { useState } from 'react'
 
 export interface QuizQuestion {
-  id: number
+  id?: number
   question: string
   type: 'multiple_choice' | 'true_false' | 'multiple_select'
   options?: string[]
-  correct_answer?: number | boolean
+  correct?: number | boolean  // Changed from correct_answer
+  correct_answer?: number | boolean  // Keep for backward compatibility
   correct_answers?: number[]
-  explanation: string
+  feedback?: string  // Changed from explanation
+  explanation?: string  // Keep for backward compatibility
 }
 
 export interface QuizData {
@@ -28,28 +30,31 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
   const [showExplanation, setShowExplanation] = useState(false)
 
   const question = quizData.questions[currentQuestion]
+  const questionId = question.id ?? currentQuestion  // Use index if no id
   const isLastQuestion = currentQuestion === quizData.questions.length - 1
-  const hasAnswer = answers[question.id] !== undefined
+  const hasAnswer = answers[questionId] !== undefined
 
   const handleAnswer = (answer: any) => {
-    setAnswers(prev => ({ ...prev, [question.id]: answer }))
+    setAnswers(prev => ({ ...prev, [questionId]: answer }))
     setShowExplanation(true) // Show explanation immediately after answering
   }
 
   const handleMultipleSelect = (optionIndex: number) => {
-    const currentAnswers = answers[question.id] || []
+    const currentAnswers = answers[questionId] || []
     const newAnswers = currentAnswers.includes(optionIndex)
       ? currentAnswers.filter((idx: number) => idx !== optionIndex)
       : [...currentAnswers, optionIndex]
     
-    setAnswers(prev => ({ ...prev, [question.id]: newAnswers }))
+    setAnswers(prev => ({ ...prev, [questionId]: newAnswers }))
   }
 
   const checkAnswer = (questionItem: QuizQuestion, userAnswer: any): boolean => {
     if (questionItem.type === 'multiple_choice') {
-      return userAnswer === questionItem.correct_answer
+      const correctAnswer = questionItem.correct ?? questionItem.correct_answer
+      return userAnswer === correctAnswer
     } else if (questionItem.type === 'true_false') {
-      return userAnswer === questionItem.correct_answer
+      const correctAnswer = questionItem.correct ?? questionItem.correct_answer
+      return userAnswer === correctAnswer
     } else if (questionItem.type === 'multiple_select') {
       const correctAnswers = questionItem.correct_answers || []
       const userAnswers = userAnswer || []
@@ -61,8 +66,9 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
 
   const calculateScore = () => {
     let correct = 0
-    quizData.questions.forEach(q => {
-      if (checkAnswer(q, answers[q.id])) {
+    quizData.questions.forEach((q, index) => {
+      const qId = q.id ?? index
+      if (checkAnswer(q, answers[qId])) {
         correct++
       }
     })
@@ -106,17 +112,17 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
             }`}>
               <input
                 type="radio"
-                name={`question-${question.id}`}
-                checked={answers[question.id] === index}
+                name={`question-${questionId}`}
+                checked={answers[questionId] === index}
                 onChange={() => !hasAnswer && handleAnswer(index)}
                 disabled={hasAnswer}
                 className="w-4 h-4 text-primary border-gray-300 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <span className={`${hasAnswer ? 'text-gray-500' : 'text-gray-700'} ${
-                answers[question.id] === index ? 'font-semibold text-primary-700' : ''
+                answers[questionId] === index ? 'font-semibold text-primary-700' : ''
               }`}>
                 {option}
-                {answers[question.id] === index && (
+                {answers[questionId] === index && (
                   <span className="ml-2 text-primary-600">✓ Selected</span>
                 )}
               </span>
@@ -132,17 +138,17 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
           }`}>
             <input
               type="radio"
-              name={`question-${question.id}`}
-              checked={answers[question.id] === true}
+              name={`question-${questionId}`}
+              checked={answers[questionId] === true}
               onChange={() => !hasAnswer && handleAnswer(true)}
               disabled={hasAnswer}
               className="w-4 h-4 text-primary border-gray-300 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <span className={`${hasAnswer ? 'text-gray-500' : 'text-gray-700'} ${
-              answers[question.id] === true ? 'font-semibold text-primary-700' : ''
+              answers[questionId] === true ? 'font-semibold text-primary-700' : ''
             }`}>
               True
-              {answers[question.id] === true && (
+              {answers[questionId] === true && (
                 <span className="ml-2 text-primary-600">✓ Selected</span>
               )}
             </span>
@@ -152,17 +158,17 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
           }`}>
             <input
               type="radio"
-              name={`question-${question.id}`}
-              checked={answers[question.id] === false}
+              name={`question-${questionId}`}
+              checked={answers[questionId] === false}
               onChange={() => !hasAnswer && handleAnswer(false)}
               disabled={hasAnswer}
               className="w-4 h-4 text-primary border-gray-300 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <span className={`${hasAnswer ? 'text-gray-500' : 'text-gray-700'} ${
-              answers[question.id] === false ? 'font-semibold text-primary-700' : ''
+              answers[questionId] === false ? 'font-semibold text-primary-700' : ''
             }`}>
               False
-              {answers[question.id] === false && (
+              {answers[questionId] === false && (
                 <span className="ml-2 text-primary-600">✓ Selected</span>
               )}
             </span>
@@ -170,7 +176,7 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
         </div>
       )
     } else if (question.type === 'multiple_select') {
-      const userAnswers = answers[question.id] || []
+      const userAnswers = answers[questionId] || []
       const hasAnyAnswer = userAnswers.length > 0
       
       return (
@@ -257,11 +263,12 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
           </h4>
           <div className="space-y-4">
             {quizData.questions.map((q, index) => {
-              const isCorrect = checkAnswer(q, answers[q.id])
-              const userAnswer = answers[q.id]
+              const qId = q.id ?? index
+              const isCorrect = checkAnswer(q, answers[qId])
+              const userAnswer = answers[qId]
               
               return (
-                <div key={q.id} className={`p-4 rounded-lg border-2 ${
+                <div key={qId} className={`p-4 rounded-lg border-2 ${
                   isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
                 }`}>
                   <div className="flex items-start justify-between mb-3">
@@ -280,15 +287,15 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
                       {!isCorrect && (
                         <div className="text-sm text-gray-600 mb-2">
                           <strong>Correct Answer:</strong> {
-                            q.type === 'multiple_choice' ? q.options?.[q.correct_answer as number] :
-                            q.type === 'true_false' ? (q.correct_answer ? 'True' : 'False') :
+                            q.type === 'multiple_choice' ? q.options?.[(q.correct ?? q.correct_answer) as number] :
+                            q.type === 'true_false' ? ((q.correct ?? q.correct_answer) ? 'True' : 'False') :
                             q.type === 'multiple_select' ? q.correct_answers?.map(i => q.options?.[i]).join(', ') :
                             'N/A'
                           }
                         </div>
                       )}
                       <div className="text-sm text-blue-700 bg-blue-100 p-3 rounded-md">
-                        <strong>Explanation:</strong> {q.explanation}
+                        <strong>Explanation:</strong> {q.feedback || q.explanation || 'No explanation available'}
                       </div>
                     </div>
                     <div className={`ml-4 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
@@ -423,11 +430,11 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
             <div className="flex items-start">
               <div className="flex-shrink-0 mr-3">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  checkAnswer(question, answers[question.id]) 
+                  checkAnswer(question, answers[questionId]) 
                     ? 'bg-green-500 text-white' 
                     : 'bg-red-500 text-white'
                 }`}>
-                  {checkAnswer(question, answers[question.id]) ? '✓' : '✗'}
+                  {checkAnswer(question, answers[questionId]) ? '✓' : '✗'}
                 </div>
               </div>
               <div className="flex-1">
@@ -435,12 +442,12 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
                   <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  {checkAnswer(question, answers[question.id]) ? 'Correct!' : 'Learning Opportunity'}
+                  {checkAnswer(question, answers[questionId]) ? 'Correct!' : 'Learning Opportunity'}
                 </h5>
                 <p className="text-blue-800 leading-relaxed">
-                  {question.explanation}
+                  {question.feedback || question.explanation || 'No explanation available'}
                 </p>
-                {!checkAnswer(question, answers[question.id]) && (
+                {!checkAnswer(question, answers[questionId]) && (
                   <div className="mt-3 p-3 bg-yellow-100 rounded-lg border border-yellow-300">
                     <p className="text-sm text-yellow-800">
                       <strong>💡 Tip:</strong> Review this concept in the lesson content to better understand the material.

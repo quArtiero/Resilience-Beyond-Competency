@@ -4,7 +4,7 @@ import { useProgress } from '../hooks/useLessons'
 import { AuthModal } from '../components/AuthModal'
 
 export function FinalProject() {
-  const { isAuthenticated, user } = useAuth()
+  const { isAuthenticated } = useAuth()
   const { data: progress } = useProgress()
   const [reflection, setReflection] = useState('')
   const [goals, setGoals] = useState('')

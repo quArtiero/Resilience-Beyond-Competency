@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useParams, Navigate, useNavigate } from 'react-router-dom'
 import { useLesson, useCompleteLesson, useLessons } from '../hooks/useLessons'
 import { useAuth } from '../hooks/useAuth'
 import { AuthModal } from '../components/AuthModal'
 import { InteractiveQuiz, QuizData } from '../components/InteractiveQuiz'
 import { MarkdownRenderer } from '../components/MarkdownRenderer'
-import { ReflectionEditor } from '../components/ReflectionEditor'
+import { EnhancedLessonContent } from '../components/EnhancedLessonContent'
 
 type TabType = 'story' | 'reflection' | 'challenge' | 'quiz'
 
@@ -88,54 +88,105 @@ export function Lesson() {
     switch (activeTab) {
       case 'story':
         return (
-          <div>
-            <MarkdownRenderer content={lesson.story} />
-            {/* Add lesson image if it exists */}
-            {lesson.id === 4 && (
-              <div className="mt-8 text-center">
-                <img 
-                  src="/src/assets/images/lesson-1-intro.jpg" 
-                  alt="Mastering Resilience Competency" 
-                  className="mx-auto max-w-full h-auto rounded-lg shadow-md"
-                  onError={(e) => {
-                    // Hide image if it doesn't exist
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
-                <p className="text-sm text-gray-500 mt-2 italic">
-                  Welcome to your resilience journey
-                </p>
-              </div>
-            )}
-          </div>
+          <EnhancedLessonContent
+            lessonId={lesson.id}
+            lessonTitle={lesson.title}
+            content={lesson.story}
+            type="story"
+          />
         )
       case 'reflection':
         return (
-          <div className="space-y-6">
-            {/* Show original reflection content if it exists */}
-            {lesson.reflection && lesson.reflection.trim() && (
-              <div className="mb-6">
-                <MarkdownRenderer content={lesson.reflection} />
-              </div>
-            )}
-            
-            {/* Interactive Reflection Editor */}
-            <ReflectionEditor
-              lessonId={lesson.id}
-              lessonTitle={lesson.title}
-              reflectionPrompt={lesson.reflection || "Take a moment to reflect on what you've learned in this lesson. How can you apply these insights to your daily life?"}
-              onSave={(content) => {
-                console.log('Reflection saved for lesson', lesson.id, ':', content)
-                // Future: Could save to backend API here
-              }}
-            />
-          </div>
+          <EnhancedLessonContent
+            lessonId={lesson.id}
+            lessonTitle={lesson.title}
+            content={lesson.reflection}
+            type="reflection"
+          />
         )
       case 'challenge':
-        return <MarkdownRenderer content={lesson.challenge} />
+        return (
+          <EnhancedLessonContent
+            lessonId={lesson.id}
+            lessonTitle={lesson.title}
+            content={lesson.challenge}
+            type="challenge"
+          />
+        )
       case 'quiz':
         try {
+          // Check if quiz exists and is not empty
+          if (!lesson.quiz || lesson.quiz.trim() === '') {
+            return (
+              <div className="flex items-center justify-center min-h-[400px]">
+                <div className="text-center max-w-md">
+                  <div className="mb-6">
+                    <svg className="w-24 h-24 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+                    Quiz Coming Soon
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    The quiz for this lesson is being prepared. Check back later or continue with the other tabs to keep learning!
+                  </p>
+                  <div className="space-y-3">
+                    <button
+                      onClick={() => setActiveTab('story')}
+                      className="w-full py-2 px-4 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
+                    >
+                      Review the Story
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('reflection')}
+                      className="w-full py-2 px-4 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
+                    >
+                      Complete Your Reflection
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('challenge')}
+                      className="w-full py-2 px-4 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition-colors"
+                    >
+                      Try the Challenge
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+          
           const quizData: QuizData = JSON.parse(lesson.quiz)
+          
+          // Check if parsed quiz is valid
+          if (!quizData || !quizData.questions || !Array.isArray(quizData.questions) || quizData.questions.length === 0) {
+            return (
+              <div className="flex items-center justify-center min-h-[400px]">
+                <div className="text-center max-w-md">
+                  <div className="mb-6">
+                    <svg className="w-24 h-24 mx-auto text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+                    Quiz Under Construction
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    We're updating this quiz to provide you with better questions. In the meantime, test your knowledge with these reflection prompts:
+                  </p>
+                  <div className="bg-blue-50 rounded-lg p-4 text-left">
+                    <h4 className="font-semibold text-blue-900 mb-3">Self-Assessment Questions:</h4>
+                    <ul className="space-y-2 text-blue-700">
+                      <li>• What are the 3 key concepts from this lesson?</li>
+                      <li>• How would you apply what you learned today?</li>
+                      <li>• What questions do you still have?</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+          
           return (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -152,8 +203,34 @@ export function Lesson() {
               />
             </div>
           )
-        } catch {
-          return <div className="text-gray-500">Quiz content is not available</div>
+        } catch (error) {
+          console.error('Quiz parsing error:', error)
+          return (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center max-w-md">
+                <div className="mb-6">
+                  <svg className="w-24 h-24 mx-auto text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+                  Oops! Quiz Unavailable
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  We encountered an issue loading the quiz. Don't worry - you can still complete the lesson! Try refreshing the page or continue with other activities.
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors mb-3"
+                >
+                  Refresh Page
+                </button>
+                <p className="text-sm text-gray-400">
+                  If the problem persists, the quiz content may be updating. Check back soon!
+                </p>
+              </div>
+            </div>
+          )
         }
       default:
         return null
@@ -164,6 +241,7 @@ export function Lesson() {
     <div className="max-w-4xl mx-auto">
       {/* Lesson Header */}
       <div className="card mb-6">
+        <>
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{lesson.title}</h1>
@@ -177,8 +255,9 @@ export function Lesson() {
           </button>
         </div>
         
-        {/* Tab Navigation - Hide for Module 1 lessons (IDs 4 and 2) and module intro lessons (ID 1) */}
-        {!(lesson.id === 4 || lesson.id === 2 || lesson.id === 1) && (
+        {/* Tab Navigation - Hide for Module 1 lessons (introduction/overview only) */}
+        {console.log('Lesson module_number:', lesson.module_number, 'Type:', typeof lesson.module_number)}
+        {lesson.module_number !== 1 && (
           <nav className="flex space-x-1 border-b border-gray-200">
             {[
               { 
@@ -231,29 +310,21 @@ export function Lesson() {
             ))}
           </nav>
         )}
+        </>
       </div>
 
       {/* Tab Content */}
       <div className="card min-h-[400px]">
-        {(lesson.id === 4 || lesson.id === 2 || lesson.id === 1) ? (
+        {lesson.module_number === 1 ? (
           // For Module 1: Show content directly without tabs
           <div>
             <MarkdownRenderer content={lesson.story} />
-            {/* Add lesson image if it exists */}
-            {lesson.id === 4 && (
-              <div className="mt-8 text-center">
-                <img 
-                  src="/src/assets/images/lesson-1-intro.jpg" 
-                  alt="Mastering Resilience Competency" 
-                  className="mx-auto max-w-full h-auto rounded-lg shadow-md"
-                  onError={(e) => {
-                    // Hide image if it doesn't exist
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
-                <p className="text-sm text-gray-500 mt-2 italic">
-                  Welcome to your resilience journey
-                </p>
+            
+            {/* Add reflection content if it exists for Module 1 */}
+            {lesson.reflection && lesson.reflection.trim() && (
+              <div className="mt-8 border-t border-gray-200 pt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Reflection</h3>
+                <MarkdownRenderer content={lesson.reflection} />
               </div>
             )}
           </div>
