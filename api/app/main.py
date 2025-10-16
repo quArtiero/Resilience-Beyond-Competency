@@ -42,15 +42,16 @@ if frontend_url and frontend_url not in origins:
 
 # For debugging in production, temporarily allow all origins
 # TODO: Remove this after confirming the correct frontend URL
-if os.getenv("ENVIRONMENT") == "production":
-    origins = ["*"]
+# Always allow all origins in production for now
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
+    allow_credentials=False if origins == ["*"] else True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Include routers
@@ -68,4 +69,10 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
-    return {"status": "healthy"} 
+    return {"status": "healthy"}
+
+
+@app.get("/api/health")
+async def api_health_check():
+    """API Health check endpoint."""
+    return {"status": "healthy", "api": "operational"} 
