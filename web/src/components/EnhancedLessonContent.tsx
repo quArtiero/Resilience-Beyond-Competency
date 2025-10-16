@@ -16,6 +16,17 @@ import { SMARTGoalsBuilder } from './SMARTGoalsBuilder'
 import { ReframingSprintTimer, ReframingToolsExplorer, OptionsLadderBuilder } from './ReframingTools'
 import { ReframingSprintWorksheet, PersonalReframeWorksheet } from './InteractiveWorksheet'
 import { ProgressTracker } from './ProgressTracker'
+import { PurposeGrid } from './PurposeGrid'
+import { DecisionTriage } from './DecisionTriage'
+import { EARScriptBuilder } from './EARScriptBuilder'
+import { IfThenPlanner } from './IfThenPlanner'
+import { FlexibilityInventory } from './FlexibilityInventory'
+import { FlexibilitySprint } from './FlexibilitySprint'
+import { SnapshotTable, BaselineComparison, FlexibilityOSBuilder, SprintPlanner } from './IntegrationTools'
+import { IntegrationReflection } from './IntegrationReflection'
+import { ChallengeTracker } from './ChallengeTracker'
+import { ChallengeReflection } from './ChallengeReflection'
+import { ChallengeStory } from './ChallengeStory'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -164,6 +175,209 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           sections.push({ type: 'text', content: text })
         }
         return sections
+      }
+      
+      // Lesson 5: Flexibility in Action - ID 41
+      if (lessonId === 41) {
+        // For reflection tab, use the interactive inventory
+        if (type === 'reflection') {
+          return [{ type: 'flexibility-inventory', content: '' }]
+        }
+        
+        // For challenge tab, use the interactive sprint component
+        if (type === 'challenge') {
+          return [{ type: 'flexibility-sprint', content: '' }]
+        }
+        
+        // For story tab, inject interactive components
+        const sections: Section[] = []
+        const lines = text.split('\n')
+        let currentText = ''
+        
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i]
+          
+          if (type === 'story') {
+            // Inject Purpose Grid after the template section
+            if (line.includes('PURPOSE GRID')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'purpose-grid', content: '' })
+              // Skip the template text
+              while (i < lines.length && !lines[i].includes('Why This Works')) {
+                i++
+              }
+              i-- // Back up one to process "Why This Works"
+              continue
+            }
+            
+            // Inject Decision Triage after the protocol header
+            if (line.includes('DECISION TRIAGE TIMER')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'decision-triage', content: '' })
+              // Skip the triage steps
+              while (i < lines.length && !lines[i].includes('Real-World Examples')) {
+                i++
+              }
+              i-- // Back up one
+              continue
+            }
+            
+            // Inject EAR Script Builder after the EAR section
+            if (line.includes('The EAR Script — Conflict to Collaboration')) {
+              currentText += line + '\n'
+              // Add the explanation first
+              while (i + 1 < lines.length && !lines[i + 1].includes('Team Scenario Examples')) {
+                i++
+                currentText += lines[i] + '\n'
+              }
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'ear-script', content: '' })
+              continue
+            }
+            
+            // Inject If-Then Planner after the micro-playbook
+            if (line.includes('The If-Then Micro-Playbook')) {
+              currentText += line + '\n'
+              // Include the format and table
+              while (i + 1 < lines.length && !lines[i + 1].includes('Personal Examples That Actually Work')) {
+                i++
+                currentText += lines[i] + '\n'
+              }
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'if-then-planner', content: '' })
+              continue
+            }
+          }
+          
+          currentText += line + '\n'
+        }
+        
+        if (currentText.trim()) {
+          sections.push({ type: 'text', content: currentText })
+        }
+        
+        return sections
+      }
+      
+      // Lesson 7: The 7-Day Reframe Challenge - ID 43
+      if (lessonId === 43) {
+        // For story tab, show both content and interactive setup
+        if (type === 'story') {
+          const sections = []
+          
+          // Split the content into sections around the pre-challenge setup
+          const setupIndex = text.indexOf('## 📋 Pre-Challenge Setup')
+          const missionIndex = text.indexOf('## Your Mission:')
+          
+          if (setupIndex !== -1) {
+            // Add content before the setup section
+            sections.push({ 
+              type: 'text', 
+              content: text.substring(0, setupIndex) 
+            })
+            
+            // Add interactive setup component
+            sections.push({ type: 'challenge-story', content: '' })
+            
+            // Add content after the mission section if it exists
+            if (missionIndex !== -1 && missionIndex > setupIndex) {
+              sections.push({ 
+                type: 'text', 
+                content: text.substring(missionIndex) 
+              })
+            }
+          } else {
+            // Fallback: show interactive component at the end
+            sections.push({ type: 'text', content: text })
+            sections.push({ type: 'challenge-story', content: '' })
+          }
+          
+          return sections
+        }
+        
+        // For the capstone challenge, use the interactive tracker
+        if (type === 'challenge') {
+          return [{ type: 'challenge-tracker', content: '' }]
+        }
+        
+        // For reflection tab, use the interactive reflection component
+        if (type === 'reflection') {
+          return [{ type: 'challenge-reflection', content: '' }]
+        }
+        
+        // For other tabs, return normal text content
+        return [{ type: 'text', content: text }]
+      }
+      
+      // Lesson 6: Reflection & Integration - ID 42
+      if (lessonId === 42) {
+        if (type === 'story') {
+          // Add interactive components at key points
+          const sections: any[] = []
+          // Use partial matches since headers have additional text
+          const snapshotIndex = text.indexOf('📊 Results Review')
+          const baselineIndex = text.indexOf('📈 Re-Run Your Baseline')
+          const osBuilderIndex = text.indexOf('🖥️ Your Flexibility OS')
+          
+          if (snapshotIndex > 0) {
+            sections.push({
+              type: 'text',
+              content: text.substring(0, snapshotIndex)
+            })
+            sections.push({ type: 'snapshot-table', content: '' })
+            
+            const nextSection = baselineIndex > 0 ? baselineIndex : text.length
+            sections.push({
+              type: 'text',
+              content: text.substring(snapshotIndex, nextSection)
+            })
+          }
+          
+          if (baselineIndex > 0) {
+            sections.push({ type: 'baseline-comparison', content: '' })
+            
+            const nextSection = osBuilderIndex > 0 ? osBuilderIndex : text.length
+            sections.push({
+              type: 'text',
+              content: text.substring(baselineIndex, nextSection)
+            })
+          }
+          
+          if (osBuilderIndex > 0) {
+            sections.push({ type: 'flexibility-os', content: '' })
+            sections.push({
+              type: 'text',
+              content: text.substring(osBuilderIndex)
+            })
+          }
+          
+          if (sections.length === 0) {
+            sections.push({ type: 'text', content: text })
+          }
+          
+          return sections
+        } else if (type === 'challenge') {
+          // Use the sprint planner for the challenge tab
+          return [{ type: 'sprint-planner', content: '' }]
+        } else if (type === 'reflection') {
+          // Use the interactive reflection component
+          return [{ type: 'integration-reflection', content: '' }]
+        }
+        
+        // Default fallback (shouldn't reach here)
+        return [{ type: 'text', content: text }]
       }
       
       // Lesson 4: Tools for Reframing - ID 40
@@ -600,6 +814,104 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           </div>
         )
       
+      case 'purpose-grid':
+        return (
+          <div key={index} className="my-8">
+            <PurposeGrid lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'decision-triage':
+        return (
+          <div key={index} className="my-8">
+            <DecisionTriage lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'ear-script':
+        return (
+          <div key={index} className="my-8">
+            <EARScriptBuilder lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'if-then-planner':
+        return (
+          <div key={index} className="my-8">
+            <IfThenPlanner lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'flexibility-inventory':
+        return (
+          <div key={index} className="my-8">
+            <FlexibilityInventory lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'flexibility-sprint':
+        return (
+          <div key={index} className="my-8">
+            <FlexibilitySprint lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'snapshot-table':
+        return (
+          <div key={index} className="my-8">
+            <SnapshotTable lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'baseline-comparison':
+        return (
+          <div key={index} className="my-8">
+            <BaselineComparison lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'flexibility-os':
+        return (
+          <div key={index} className="my-8">
+            <FlexibilityOSBuilder lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'sprint-planner':
+        return (
+          <div key={index} className="my-8">
+            <SprintPlanner lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'integration-reflection':
+        return (
+          <div key={index} className="my-8">
+            <IntegrationReflection lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'challenge-tracker':
+        return (
+          <div key={index} className="my-8">
+            <ChallengeTracker lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'challenge-reflection':
+        return (
+          <div key={index} className="my-8">
+            <ChallengeReflection lessonId={lessonId} />
+          </div>
+        )
+      
+      case 'challenge-story':
+        return (
+          <div key={index} className="my-8">
+            <ChallengeStory lessonId={lessonId} />
+          </div>
+        )
+      
       default:
         return null
     }
@@ -667,8 +979,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         </div>
       )) : <div>No sections to display</div>}
       
-      {/* Reflection editor - only at the end */}
-      {type === 'reflection' && (
+      {/* Reflection editor - only at the end (skip for lessons with their own reflection editors) */}
+      {type === 'reflection' && 
+       lessonId !== 42 && // Lesson 6: Has IntegrationReflection with its own ReflectionEditor
+       lessonId !== 43 && // Lesson 7: Has ChallengeReflection with its own ReflectionEditor
+       (
         <div className="mt-8 p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl shadow-lg">
           <h3 className="text-lg font-bold text-gray-800 mb-4">
             ✏️ Your Personal Reflection Space

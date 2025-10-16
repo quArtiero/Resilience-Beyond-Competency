@@ -4,6 +4,7 @@ Main FastAPI application for Resilient Mastery platform.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+import os
 
 from app.deps import create_db_and_tables
 from app.routers import lessons, auth, admin
@@ -28,9 +29,19 @@ app = FastAPI(
 )
 
 # Configure CORS
+origins = [
+    "http://localhost:5173",  # React dev server
+    "http://localhost:3000",  # Alternative dev port
+]
+
+# Add production frontend URL if available
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

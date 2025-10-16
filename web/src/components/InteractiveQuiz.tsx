@@ -49,7 +49,8 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
   }
 
   const checkAnswer = (questionItem: QuizQuestion, userAnswer: any): boolean => {
-    if (questionItem.type === 'multiple_choice') {
+    // Default to multiple_choice if no type is specified but has options
+    if (questionItem.type === 'multiple_choice' || (!questionItem.type && questionItem.options)) {
       const correctAnswer = questionItem.correct ?? questionItem.correct_answer
       return userAnswer === correctAnswer
     } else if (questionItem.type === 'true_false') {
@@ -103,7 +104,8 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
   }
 
   const renderQuestion = () => {
-    if (question.type === 'multiple_choice') {
+    // Default to multiple_choice if no type is specified
+    if (question.type === 'multiple_choice' || (!question.type && question.options)) {
       return (
         <div className="space-y-3">
           {question.options?.map((option, index) => (
@@ -278,7 +280,7 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
                       </h5>
                       <div className="text-sm text-gray-600 mb-2">
                         <strong>Your Answer:</strong> {
-                          q.type === 'multiple_choice' ? q.options?.[userAnswer] :
+                          (q.type === 'multiple_choice' || (!q.type && q.options)) ? q.options?.[userAnswer] :
                           q.type === 'true_false' ? (userAnswer ? 'True' : 'False') :
                           q.type === 'multiple_select' ? userAnswer?.map((i: number) => q.options?.[i]).join(', ') :
                           'No answer'
@@ -287,7 +289,7 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
                       {!isCorrect && (
                         <div className="text-sm text-gray-600 mb-2">
                           <strong>Correct Answer:</strong> {
-                            q.type === 'multiple_choice' ? q.options?.[(q.correct ?? q.correct_answer) as number] :
+                            (q.type === 'multiple_choice' || (!q.type && q.options)) ? q.options?.[(q.correct ?? q.correct_answer) as number] :
                             q.type === 'true_false' ? ((q.correct ?? q.correct_answer) ? 'True' : 'False') :
                             q.type === 'multiple_select' ? q.correct_answers?.map(i => q.options?.[i]).join(', ') :
                             'N/A'
