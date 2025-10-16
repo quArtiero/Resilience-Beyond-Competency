@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CheckCircle2, Circle, AlertCircle, Target, Clock, Download } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Target, Clock, Download } from 'lucide-react'
 
 interface ChallengeData {
   // Today's Practice

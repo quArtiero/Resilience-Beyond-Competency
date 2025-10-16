@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CheckCircle2, Circle, Save, Download } from 'lucide-react'
+import { CheckCircle2, Circle, Download } from 'lucide-react'
 
 interface ReflectionData {
   // EQ Skills Assessment
