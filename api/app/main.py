@@ -32,12 +32,18 @@ app = FastAPI(
 origins = [
     "http://localhost:5173",  # React dev server
     "http://localhost:3000",  # Alternative dev port
+    "https://resilience-frontend.onrender.com",  # Production frontend
 ]
 
 # Add production frontend URL if available
 frontend_url = os.getenv("FRONTEND_URL")
-if frontend_url:
+if frontend_url and frontend_url not in origins:
     origins.append(frontend_url)
+
+# For debugging in production, temporarily allow all origins
+# TODO: Remove this after confirming the correct frontend URL
+if os.getenv("ENVIRONMENT") == "production":
+    origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,

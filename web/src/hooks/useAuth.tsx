@@ -101,12 +101,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw error
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Login error:', error)
+      console.error('Error response:', error.response)
+      console.error('Error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        headers: error.response?.headers
+      })
+      
+      let errorMessage = 'Please check your credentials and try again'
+      
+      if (error.response?.status === 0 || error.code === 'ERR_NETWORK') {
+        errorMessage = 'Cannot connect to server. Please check your connection or try again later.'
+      } else if (error.response?.status === 403) {
+        errorMessage = 'Access denied. This might be a CORS issue.'
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail
+      }
+      
       addNotification({
         type: 'error',
         title: 'Sign in failed',
-        message: (error as any).response?.data?.detail || 'Please check your credentials and try again'
+        message: errorMessage
       })
     }
   })
@@ -123,12 +141,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
         message: `Welcome ${userData.username}! Please sign in to continue.`
       })
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Registration error:', error)
+      console.error('Error response:', error.response)
+      console.error('Error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        headers: error.response?.headers
+      })
+      
+      let errorMessage = 'Please try again with different details'
+      
+      if (error.response?.status === 0 || error.code === 'ERR_NETWORK') {
+        errorMessage = 'Cannot connect to server. Please check your connection or try again later.'
+      } else if (error.response?.status === 403) {
+        errorMessage = 'Access denied. This might be a CORS issue.'
+      } else if (error.response?.status === 422) {
+        errorMessage = 'Invalid data provided. Please check your input.'
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail
+      }
+      
       addNotification({
         type: 'error',
         title: 'Registration failed',
-        message: (error as any).response?.data?.detail || 'Please try again with different details'
+        message: errorMessage
       })
     }
   })

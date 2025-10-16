@@ -2,8 +2,17 @@ import axios from 'axios'
 
 // API client configuration
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+const finalApiUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+
+console.log('API Configuration:', {
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  apiUrl: apiUrl,
+  finalApiUrl: finalApiUrl,
+  environment: import.meta.env.MODE
+})
+
 export const apiClient = axios.create({
-  baseURL: apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`,
+  baseURL: finalApiUrl,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -15,6 +24,16 @@ apiClient.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
+  
+  // Debug logging
+  console.log('API Request:', {
+    method: config.method,
+    url: config.url,
+    baseURL: config.baseURL,
+    fullURL: `${config.baseURL}${config.url}`,
+    headers: config.headers
+  })
+  
   return config
 })
 
