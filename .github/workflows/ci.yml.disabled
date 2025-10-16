@@ -1,0 +1,135 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: resilient_mastery_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install API dependencies
+      working-directory: ./api
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run API tests
+      working-directory: ./api
+      env:
+        DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/resilient_mastery_test
+        SECRET_KEY: test-secret-key
+      run: |
+        python -m pytest --cov=app --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./api/coverage.xml
+        flags: api
+
+  test-web:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: web/package-lock.json
+    
+    - name: Install web dependencies
+      working-directory: ./web
+      run: npm ci
+    
+    - name: Run linting
+      working-directory: ./web
+      run: npm run lint
+    
+    - name: Run tests
+      working-directory: ./web
+      run: npm test -- --coverage
+    
+    - name: Build application
+      working-directory: ./web
+      run: npm run build
+
+  lint-and-format:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: web/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        pip install black isort flake8
+        cd web && npm ci
+    
+    - name: Check Python formatting
+      working-directory: ./api
+      run: |
+        black --check .
+        isort --check-only .
+        flake8 .
+    
+    - name: Check web formatting
+      working-directory: ./web
+      run: |
+        npm run lint
+        npx prettier --check .
+
+  build-and-test-docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker images
+      run: |
+        docker-compose build
+    
+    - name: Run integration tests
+      run: |
+        docker-compose up -d db
+        sleep 10
+        docker-compose run --rm api python -m pytest
+        docker-compose down 
