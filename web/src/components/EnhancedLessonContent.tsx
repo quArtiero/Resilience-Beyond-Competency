@@ -27,6 +27,8 @@ import { IntegrationReflection } from './IntegrationReflection'
 import { ChallengeTracker } from './ChallengeTracker'
 import { ChallengeReflection } from './ChallengeReflection'
 import { ChallengeStory } from './ChallengeStory'
+import { RedLineReflection } from './RedLineReflection'
+import { RedLineChallenge } from './RedLineChallenge'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -101,21 +103,96 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
-      // Lesson 4: Importance of EI - ID 20
+      // Lesson 4: The Red Line Meeting - ID 20
       if (lessonId === 20) {
         if (type === 'story') {
-          sections.push({
-            type: 'text',
-            content: text.substring(0, Math.min(800, text.length))
-          })
-          sections.push({ type: 'eq-assessment' })
-          sections.push({
-            type: 'text',
-            content: text.substring(800)
-          })
-        } else {
-          sections.push({ type: 'text', content: text })
+          const sections: any[] = []
+          const lines = text.split('\n')
+          let currentText = ''
+          let inEQSection = false
+          let inBreathingSection = false
+          let inIfThenSection = false
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            // Detect EQ Assessment section
+            if (line.includes('## 📊 Interactive EQ Assessment')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'eq-assessment' })
+              inEQSection = true
+              continue
+            }
+            
+            // Skip the EQ template content
+            if (inEQSection && line.includes('### 📈 Your Assessment Results')) {
+              inEQSection = false
+              continue
+            }
+            
+            if (inEQSection) continue
+            
+            // Detect Breathing Exercise section
+            if (line.includes('## 🫁 The Breathing Reset')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'breathing-exercise' })
+              inBreathingSection = true
+              continue
+            }
+            
+            // Skip the breathing template content
+            if (inBreathingSection && line.includes('### 🎯 Practice Now')) {
+              inBreathingSection = false
+              continue
+            }
+            
+            if (inBreathingSection) continue
+            
+            // Detect If-Then Planner section
+            if (line.includes('## 🎯 If-Then Planning')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'if-then-planner' })
+              inIfThenSection = true
+              continue
+            }
+            
+            // Skip the if-then template content
+            if (inIfThenSection && line.includes('## 🔄 The Red Line Loop')) {
+              inIfThenSection = false
+            }
+            
+            if (inIfThenSection) continue
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
         }
+        
+        if (type === 'reflection') {
+          // Use the custom interactive reflection component for lesson 20
+          return [{ type: 'redline-reflection', content: '' }]
+        }
+        
+        if (type === 'challenge') {
+          // Use the custom interactive challenge component for lesson 20
+          return [{ type: 'redline-challenge', content: '' }]
+        }
+        
+        sections.push({ type: 'text', content: text })
         return sections
       }
       
@@ -891,6 +968,20 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           </div>
         )
       
+      case 'redline-reflection':
+        return (
+          <div key={index} className="my-8">
+            <RedLineReflection />
+          </div>
+        )
+      
+      case 'redline-challenge':
+        return (
+          <div key={index} className="my-8">
+            <RedLineChallenge />
+          </div>
+        )
+      
       case 'challenge-tracker':
         return (
           <div key={index} className="my-8">
@@ -981,6 +1072,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       {/* Reflection editor - only at the end (skip for lessons with their own reflection editors) */}
       {type === 'reflection' && 
+       lessonId !== 20 && // Lesson 20: Has RedLineReflection with its own interactive components
        lessonId !== 42 && // Lesson 6: Has IntegrationReflection with its own ReflectionEditor
        lessonId !== 43 && // Lesson 7: Has ChallengeReflection with its own ReflectionEditor
        (
@@ -1009,7 +1101,9 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       )}
       
       {/* Challenge completion tracker */}
-      {type === 'challenge' && (
+      {type === 'challenge' && 
+       lessonId !== 20 && // Lesson 20: Has RedLineChallenge with its own tracking system
+       (
         <div className="mt-8 p-6 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl">
           <h3 className="text-lg font-bold text-gray-800 mb-4">🎯 Track Your Progress</h3>
           <ReflectionEditor
