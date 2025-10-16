@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Save, Download, RefreshCw } from 'lucide-react'
+import { Save, Download } from 'lucide-react'
 import { ReflectionEditor } from './ReflectionEditor'
 
 interface ReflectionData {

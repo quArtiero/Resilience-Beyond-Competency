@@ -23,10 +23,14 @@ export function IfThenPlanner({ lessonId, onComplete }: IfThenPlannerProps) {
     return saved ? JSON.parse(saved) : []
   })
   
-  const [newPlan, setNewPlan] = useState({
+  const [newPlan, setNewPlan] = useState<{
+    trigger: string
+    alternative: string
+    category: 'work' | 'personal' | 'relationship'
+  }>({
     trigger: '',
     alternative: '',
-    category: 'personal' as const
+    category: 'personal'
   })
   
   const [filter, setFilter] = useState<'all' | 'work' | 'personal' | 'relationship'>('all')

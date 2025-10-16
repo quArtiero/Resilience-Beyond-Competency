@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Save, Download, Brain, Target, Clock, Users } from 'lucide-react'
+import { Save, Download, Brain, Target, Users } from 'lucide-react'
 
 interface StoryData {
   // Pre-Challenge Setup

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AlertCircle, TrendingUp, Target, Clock, Activity, CheckCircle, Download, Save, RefreshCw, Calendar } from 'lucide-react';
+import { TrendingUp, Target, Activity, CheckCircle, Download, Calendar } from 'lucide-react';
 
 // ==================== Snapshot Table Component ====================
 export const SnapshotTable: React.FC<{ lessonId: number }> = ({ lessonId }) => {
@@ -330,12 +330,12 @@ export const BaselineComparison: React.FC<{ lessonId: number }> = ({ lessonId })
 
   const topGains = changes
     .map((change: number, index: number) => ({ change, index }))
-    .sort((a, b) => b.change - a.change)
+    .sort((a: {change: number, index: number}, b: {change: number, index: number}) => b.change - a.change)
     .slice(0, 2);
 
   const needsWork = changes
     .map((change: number, index: number) => ({ change, index }))
-    .filter(item => item.change <= 0);
+    .filter((item: {change: number, index: number}) => item.change <= 0);
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
@@ -360,7 +360,7 @@ export const BaselineComparison: React.FC<{ lessonId: number }> = ({ lessonId })
             <tbody>
               {assessmentItems.map((item, index) => {
                 const change = changes[index];
-                const isTopGain = topGains.some(g => g.index === index);
+                const isTopGain = topGains.some((g: {change: number, index: number}) => g.index === index);
                 const needsImprovement = change <= 0;
 
                 return (
@@ -420,7 +420,7 @@ export const BaselineComparison: React.FC<{ lessonId: number }> = ({ lessonId })
             <div className="p-4 bg-green-100 rounded-lg">
               <h4 className="font-semibold text-green-800 mb-2">🌟 Your Signature Strengths (Top 2 Gains)</h4>
               <ul className="space-y-1">
-                {topGains.map(gain => (
+                {topGains.map((gain: {change: number, index: number}) => (
                   <li key={gain.index} className="text-green-700">
                     • {assessmentItems[gain.index]} (+{gain.change})
                   </li>
@@ -434,7 +434,7 @@ export const BaselineComparison: React.FC<{ lessonId: number }> = ({ lessonId })
             <div className="p-4 bg-amber-100 rounded-lg">
               <h4 className="font-semibold text-amber-800 mb-2">🎯 Your Development Edge</h4>
               <ul className="space-y-1">
-                {needsWork.map(item => (
+                {needsWork.map((item: {change: number, index: number}) => (
                   <li key={item.index} className="text-amber-700">
                     • {assessmentItems[item.index]} ({item.change <= 0 ? 'No change' : item.change})
                   </li>

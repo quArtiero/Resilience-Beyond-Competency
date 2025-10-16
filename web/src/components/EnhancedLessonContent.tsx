@@ -190,7 +190,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         }
         
         // For story tab, inject interactive components
-        const sections: Section[] = []
+        const sections: any[] = []
         const lines = text.split('\n')
         let currentText = ''
         

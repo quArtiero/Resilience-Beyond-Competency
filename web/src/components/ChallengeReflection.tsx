@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Save, Download, TrendingUp, Award, Heart, Lightbulb } from 'lucide-react'
+import { Save, Download } from 'lucide-react'
 import { ReflectionEditor } from './ReflectionEditor'
 
 interface ReflectionData {
@@ -122,13 +122,6 @@ export const ChallengeReflection: React.FC<{ lessonId: number }> = ({ lessonId }
     setData(prev => ({ ...prev, [field]: value }))
   }
   
-  const updateArrayField = (field: keyof ReflectionData, index: number, value: string) => {
-    setData(prev => {
-      const array = [...(prev[field] as string[])]
-      array[index] = value
-      return { ...prev, [field]: array }
-    })
-  }
   
   const getCompletionRate = () => {
     const allFields = [
