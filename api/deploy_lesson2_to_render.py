@@ -397,7 +397,7 @@ async def main():
                 print(f"Updating existing Lesson 21: {existing_lesson.title}")
                 # Update existing lesson
                 existing_lesson.title = "EI Foundations & Baseline"
-                existing_lesson.description = "Establish your EI baseline across all five pillars and build your personal operating system"
+                existing_lesson.slug = "ei-foundations-baseline"
                 existing_lesson.module_number = 2
                 existing_lesson.order = 5
                 existing_lesson.is_published = True
@@ -411,8 +411,8 @@ async def main():
                 # Create new lesson
                 new_lesson = Lesson(
                     id=21,
+                    slug="ei-foundations-baseline",
                     title="EI Foundations & Baseline",
-                    description="Establish your EI baseline across all five pillars and build your personal operating system",
                     module_number=2,
                     order=5,
                     is_published=True,
