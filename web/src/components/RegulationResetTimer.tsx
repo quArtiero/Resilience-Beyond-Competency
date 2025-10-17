@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Play, Pause, RotateCcw, CheckCircle } from 'lucide-react'
+import { Play, Pause, RotateCcw } from 'lucide-react'
 
 interface ResetSession {
   timestamp: string

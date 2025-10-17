@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Shield, Download, Save, Plus } from 'lucide-react'
+import { Shield, Download, Save } from 'lucide-react'
 
 interface ProtocolCard {
   triggers: string[]

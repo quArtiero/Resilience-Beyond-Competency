@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Activity, Droplets, Move, CheckCircle, RotateCcw } from 'lucide-react'
+import { Activity, Droplets, Move, CheckCircle } from 'lucide-react'
 
 interface StateSwitch {
   timestamp: string
