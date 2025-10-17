@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { MessageCircle, CheckCircle, RefreshCcw, Target } from 'lucide-react'
+import { MessageCircle, CheckCircle, RefreshCcw } from 'lucide-react'
 
 interface LRLResponse {
   statement: string

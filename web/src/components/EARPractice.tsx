@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Mic, Play, Pause, RotateCcw, Clock, CheckCircle } from 'lucide-react'
+import { Play, Pause, RotateCcw } from 'lucide-react'
 
 interface EARSession {
   timestamp: string

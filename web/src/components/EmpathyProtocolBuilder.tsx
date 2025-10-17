@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FileText, Download, Save, Target, MessageSquare, Users } from 'lucide-react'
+import { Download, Save, Target, MessageSquare } from 'lucide-react'
 
 interface EmpathyProtocol {
   defaultLRL: string

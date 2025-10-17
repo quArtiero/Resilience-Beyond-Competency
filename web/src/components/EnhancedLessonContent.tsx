@@ -398,7 +398,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         if (type === 'reflection') {
           // Parse for empathy drills
           const lines = text.split('\n')
-          const sections: Section[] = []
+          const sections = []
           let currentText = ''
           
           for (let i = 0; i < lines.length; i++) {
@@ -453,7 +453,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         if (type === 'challenge') {
           // Parse for challenge components
           const lines = text.split('\n')
-          const sections: Section[] = []
+          const sections = []
           let currentText = ''
           
           for (let i = 0; i < lines.length; i++) {

@@ -1,5 +1,5 @@
 import { useState, createElement } from 'react'
-import { Briefcase, Users, Home, GraduationCap, Heart, ChevronRight, CheckCircle } from 'lucide-react'
+import { Briefcase, Users, Home, GraduationCap, Heart, CheckCircle } from 'lucide-react'
 
 interface Case {
   id: string

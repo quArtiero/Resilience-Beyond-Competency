@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Calendar, TrendingUp, Award, Target, BarChart3 } from 'lucide-react'
+import { TrendingUp, Award, Target, BarChart3 } from 'lucide-react'
 
 interface DailyEntry {
   date: string

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Mail, MessageSquare, CheckCircle, RefreshCcw, ArrowRight } from 'lucide-react'
+import { Mail, RefreshCcw } from 'lucide-react'
 
 interface AsyncMessage {
   original: string
