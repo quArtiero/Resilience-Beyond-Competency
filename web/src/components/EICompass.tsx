@@ -379,33 +379,37 @@ ${data.leadingIndicators.join(', ') || 'Not set'}
           <h3 className="text-lg font-semibold mb-4">Values → Behaviors → Metrics</h3>
           
           <div className="space-y-3">
-            {[1, 2, 3].map(num => (
-              <div key={num} className="border rounded-lg p-3 bg-gray-50">
-                <div className="grid grid-cols-3 gap-2">
-                  <input
-                    type="text"
-                    value={data[`value${num}` as keyof CompassData].value}
-                    onChange={(e) => updateValue(`value${num}` as any, 'value', e.target.value)}
-                    placeholder={`Value ${num}`}
-                    className="px-2 py-1 border border-gray-300 rounded text-sm"
-                  />
-                  <input
-                    type="text"
-                    value={data[`value${num}` as keyof CompassData].behavior}
-                    onChange={(e) => updateValue(`value${num}` as any, 'behavior', e.target.value)}
-                    placeholder="Behavior"
-                    className="px-2 py-1 border border-gray-300 rounded text-sm"
-                  />
-                  <input
-                    type="text"
-                    value={data[`value${num}` as keyof CompassData].metric}
-                    onChange={(e) => updateValue(`value${num}` as any, 'metric', e.target.value)}
-                    placeholder="Metric"
-                    className="px-2 py-1 border border-gray-300 rounded text-sm"
-                  />
+            {[1, 2, 3].map(num => {
+              const valueKey = `value${num}` as 'value1' | 'value2' | 'value3'
+              const valueData = data[valueKey]
+              return (
+                <div key={num} className="border rounded-lg p-3 bg-gray-50">
+                  <div className="grid grid-cols-3 gap-2">
+                    <input
+                      type="text"
+                      value={valueData.value}
+                      onChange={(e) => updateValue(valueKey, 'value', e.target.value)}
+                      placeholder={`Value ${num}`}
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                    <input
+                      type="text"
+                      value={valueData.behavior}
+                      onChange={(e) => updateValue(valueKey, 'behavior', e.target.value)}
+                      placeholder="Behavior"
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                    <input
+                      type="text"
+                      value={valueData.metric}
+                      onChange={(e) => updateValue(valueKey, 'metric', e.target.value)}
+                      placeholder="Metric"
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
