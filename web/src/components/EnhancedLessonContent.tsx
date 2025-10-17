@@ -33,6 +33,9 @@ import { BaselineAssessment } from './BaselineAssessment'
 import { EmotionGranularity } from './EmotionGranularity'
 import { ValuesMap } from './ValuesMap'
 import { EICompass } from './EICompass'
+import { TriggerMap } from './TriggerMap'
+import { InteroceptionScanner } from './InteroceptionScanner'
+import { StoryRewriter } from './StoryRewriter'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -317,8 +320,60 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
-      // Lesson 6: Self-Regulation - ID 22
+      // Lesson 3: Self-Awareness - ID 22  
       if (lessonId === 22) {
+        if (type === 'reflection') {
+          // Parse for trigger map, interoception scanner, and story rewriter
+          const lines = text.split('\n')
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<trigger-map>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'trigger-map' })
+              continue
+            }
+            
+            if (line.includes('<interoception-scanner>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'interoception-scanner' })
+              continue
+            }
+            
+            if (line.includes('<story-rewriter>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'story-rewriter' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+        
+        // For story and challenge tabs, just render as text
+        sections.push({ type: 'text', content: text })
+        return sections
+      }
+      
+      // Lesson 6: Self-Regulation - ID 23 (was 22, now moved)
+      if (lessonId === 23) {
         if (type === 'story') {
           sections.push({
             type: 'text',
@@ -1117,6 +1172,27 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return (
           <div key={index} className="my-8">
             <EICompass />
+          </div>
+        )
+      
+      case 'trigger-map':
+        return (
+          <div key={index} className="my-8">
+            <TriggerMap />
+          </div>
+        )
+      
+      case 'interoception-scanner':
+        return (
+          <div key={index} className="my-8">
+            <InteroceptionScanner />
+          </div>
+        )
+      
+      case 'story-rewriter':
+        return (
+          <div key={index} className="my-8">
+            <StoryRewriter />
           </div>
         )
       
