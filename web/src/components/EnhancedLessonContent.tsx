@@ -36,6 +36,7 @@ import { EICompass } from './EICompass'
 import { TriggerMap } from './TriggerMap'
 import { InteroceptionScanner } from './InteroceptionScanner'
 import { StoryRewriter } from './StoryRewriter'
+import { SelfAwarenessChallenge } from './SelfAwarenessChallenge'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -322,6 +323,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // Lesson 3: Self-Awareness - ID 22  
       if (lessonId === 22) {
+        if (type === 'challenge') {
+          // Return the interactive challenge component
+          return [{ type: 'self-awareness-challenge' }]
+        }
+        
         if (type === 'reflection') {
           // Parse for trigger map, interoception scanner, and story rewriter
           const lines = text.split('\n')
@@ -367,7 +373,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           return sections
         }
         
-        // For story and challenge tabs, just render as text
+        // For story tab, just render as text
         sections.push({ type: 'text', content: text })
         return sections
       }
@@ -1196,6 +1202,13 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           </div>
         )
       
+      case 'self-awareness-challenge':
+        return (
+          <div key={index} className="my-8">
+            <SelfAwarenessChallenge />
+          </div>
+        )
+      
       case 'challenge-tracker':
         return (
           <div key={index} className="my-8">
@@ -1317,6 +1330,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       {/* Challenge completion tracker */}
       {type === 'challenge' && 
        lessonId !== 20 && // Lesson 20: Has RedLineChallenge with its own tracking system
+       lessonId !== 22 && // Lesson 22: Has SelfAwarenessChallenge with its own tracking system
        (
         <div className="mt-8 p-6 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl">
           <h3 className="text-lg font-bold text-gray-800 mb-4">🎯 Track Your Progress</h3>

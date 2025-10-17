@@ -2,8 +2,9 @@ import { useState } from 'react'
 
 export interface QuizQuestion {
   id?: number
-  question: string
-  type: 'multiple_choice' | 'true_false' | 'multiple_select'
+  question?: string  // Made optional to support both fields
+  text?: string  // Alternative field name used in some lessons
+  type?: 'multiple_choice' | 'true_false' | 'multiple_select'  // Made optional for backward compatibility
   options?: string[]
   correct?: number | boolean  // Changed from correct_answer
   correct_answer?: number | boolean  // Keep for backward compatibility
@@ -409,7 +410,7 @@ export function InteractiveQuiz({ quizData, onComplete }: InteractiveQuizProps) 
       {/* Question */}
       <div className="p-6 border border-gray-200 rounded-lg">
         <h4 className="text-lg font-semibold text-gray-900 mb-4">
-          {question.question}
+          {question.question || question.text}
         </h4>
         
         {renderQuestion()}
