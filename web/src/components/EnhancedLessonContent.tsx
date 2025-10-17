@@ -37,6 +37,14 @@ import { TriggerMap } from './TriggerMap'
 import { InteroceptionScanner } from './InteroceptionScanner'
 import { StoryRewriter } from './StoryRewriter'
 import { SelfAwarenessChallenge } from './SelfAwarenessChallenge'
+import { RegulationResetTimer } from './RegulationResetTimer'
+import { GroundingExercise } from './GroundingExercise'
+import { ReappraisalBuilder } from './ReappraisalBuilder'
+import { RegulationSimulator } from './RegulationSimulator'
+import { RegulationIntegrationCheck } from './RegulationIntegrationCheck'
+import { ProtocolCardBuilder } from './ProtocolCardBuilder'
+import { StateSwitchTracker } from './StateSwitchTracker'
+import { RegulationExitReflection } from './RegulationExitReflection'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -378,21 +386,137 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
-      // Lesson 6: Self-Regulation - ID 23 (was 22, now moved)
+      // Lesson 4: Self-Regulation - ID 23 (Emotional Intelligence Module)
       if (lessonId === 23) {
-        if (type === 'story') {
-          sections.push({
-            type: 'text',
-            content: text.substring(0, Math.min(700, text.length))
-          })
-          sections.push({ type: 'breathing-exercise' })
-          sections.push({
-            type: 'text',
-            content: text.substring(700)
-          })
-        } else {
-          sections.push({ type: 'text', content: text })
+        if (type === 'reflection') {
+          // Parse for regulation drills
+          const lines = text.split('\n')
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<regulation-reset-timer>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'regulation-reset-timer' })
+              continue
+            }
+            
+            if (line.includes('<grounding-exercise>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'grounding-exercise' })
+              continue
+            }
+            
+            if (line.includes('<reappraisal-builder>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'reappraisal-builder' })
+              continue
+            }
+            
+            // Check for Integration Check section
+            if (line.includes('### Integration Check')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'regulation-integration-check' })
+              // Skip the rest of the integration check content
+              while (i < lines.length - 1 && !lines[i + 1].includes('### ')) {
+                i++
+              }
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
         }
+        
+        if (type === 'challenge') {
+          // Parse for challenge components
+          const lines = text.split('\n')
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<if-then-planner>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'if-then-planner' })
+              continue
+            }
+            
+            if (line.includes('<regulation-simulator>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'regulation-simulator' })
+              continue
+            }
+            
+            if (line.includes('<protocol-card-builder>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'protocol-card-builder' })
+              continue
+            }
+            
+            if (line.includes('<state-switch-tracker>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'state-switch-tracker' })
+              continue
+            }
+            
+            // Check for Exit Reflection section
+            if (line.includes('### Exit Reflection')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'regulation-exit-reflection' })
+              // Skip the rest of the exit reflection content
+              while (i < lines.length - 1 && !lines[i + 1].includes('### ')) {
+                i++
+              }
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+        
+        // For story tab, just render as text
+        sections.push({ type: 'text', content: text })
         return sections
       }
       
@@ -1206,6 +1330,62 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return (
           <div key={index} className="my-8">
             <SelfAwarenessChallenge />
+          </div>
+        )
+      
+      case 'regulation-reset-timer':
+        return (
+          <div key={index} className="my-8">
+            <RegulationResetTimer />
+          </div>
+        )
+      
+      case 'grounding-exercise':
+        return (
+          <div key={index} className="my-8">
+            <GroundingExercise />
+          </div>
+        )
+      
+      case 'reappraisal-builder':
+        return (
+          <div key={index} className="my-8">
+            <ReappraisalBuilder />
+          </div>
+        )
+      
+      case 'regulation-simulator':
+        return (
+          <div key={index} className="my-8">
+            <RegulationSimulator />
+          </div>
+        )
+      
+      case 'regulation-integration-check':
+        return (
+          <div key={index} className="my-8">
+            <RegulationIntegrationCheck />
+          </div>
+        )
+      
+      case 'protocol-card-builder':
+        return (
+          <div key={index} className="my-8">
+            <ProtocolCardBuilder />
+          </div>
+        )
+      
+      case 'state-switch-tracker':
+        return (
+          <div key={index} className="my-8">
+            <StateSwitchTracker />
+          </div>
+        )
+      
+      case 'regulation-exit-reflection':
+        return (
+          <div key={index} className="my-8">
+            <RegulationExitReflection />
           </div>
         )
       
