@@ -1,0 +1,94 @@
+# Your EI Baseline: Where You Stand Today
+
+## The 5-Pillar Assessment
+
+*12-15 minutes to establish your starting point*
+
+This isn't a test — it's a map. You're identifying which muscles are strong and which need work. Be honest; inflation helps no one.
+
+<baseline-assessment>
+</baseline-assessment>
+
+## Emotion Granularity: Precision Practice
+
+*5-7 minutes to sharpen your emotional vocabulary*
+
+Vague emotions create vague responses. Precise emotions enable precise action.
+
+### The Granularity Ladder
+
+Instead of saying "stressed," you might be:
+- **Overloaded** — too many tasks, need prioritization
+- **Time-pressed** — tight deadline, need efficiency
+- **Uncertain** — unclear expectations, need clarification
+- **Scattered** — attention split, need focus
+
+Instead of saying "angry," you might be:
+- **Dismissed** — not heard, need acknowledgment
+- **Blocked** — prevented from acting, need autonomy
+- **Disrespected** — boundary crossed, need repair
+- **Protective** — something threatened, need safety
+
+<emotion-granularity>
+</emotion-granularity>
+
+## Values → Motivation Alignment
+
+*8-10 minutes to connect what matters to what you do*
+
+Your values are your emotional North Star. When actions align with values, motivation becomes sustainable.
+
+### Identify Your Top 3 Values
+
+Common values (circle or note your top 3):
+- Honesty
+- Learning
+- Reliability
+- Service
+- Courage
+- Creativity
+- Excellence
+- Health
+- Family
+- Autonomy
+- Curiosity
+- Impact
+- Community
+- Fairness
+- Growth
+
+<values-map>
+</values-map>
+
+## Reflection Questions
+
+*Take 5 minutes to capture insights*
+
+1. **Surprises:** What surprised you about your pillar scores? Which was higher/lower than expected?
+
+2. **Patterns:** Looking at your lowest pillar, can you identify 2-3 specific situations where this weakness shows up?
+
+3. **Values-Behavior Gap:** Where is the biggest gap between what you value and how you behave under pressure?
+
+4. **Emotion Precision:** Which vague emotion label do you overuse? What are 3 more precise alternatives?
+
+5. **Growth Edge:** Based on your assessment, what single skill would create the biggest positive impact if you improved it by just 20%?
+
+## Your Development Focus
+
+Based on your assessment, identify:
+- **Primary Pillar:** The one you'll focus on this week
+- **Secondary Pillar:** The one you'll add next week
+- **Strength Pillar:** The one you can leverage immediately
+
+Remember: You don't need to fix everything. 20% improvement in your weakest area often creates 80% of the benefit.
+
+## Key Insight
+
+The gap between your highest and lowest pillar score represents your emotional range under pressure. The smaller the gap, the more consistent you are. The larger the gap, the more situation-dependent your effectiveness.
+
+Neither is good or bad — it's just data about where to focus.
+
+---
+
+*Next: You'll build your EI Compass and create your practice plan.*

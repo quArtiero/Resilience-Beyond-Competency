@@ -1,0 +1,111 @@
+# Your EI Operating System: Building the Compass
+
+## Creating Your Personal EI Compass
+
+*15-20 minutes to build your guide*
+
+This becomes your one-page operating system for emotional intelligence. Keep it visible — it's your quick reference under pressure.
+
+<ei-compass>
+</ei-compass>
+
+## Practice Drills: Choose Your Training
+
+*10-15 minutes to practice*
+
+Select TWO drills based on your lowest pillars:
+
+### Drill 1: Body Scan & Label (Self-Awareness + Regulation)
+*If these are your weak points, start here*
+
+<body-scan-drill>
+</body-scan-drill>
+
+### Drill 2: If-Then Builder (Self-Regulation)
+*Pre-load your responses to known triggers*
+
+<if-then-builder>
+</if-then-builder>
+
+### Drill 3: LRL Micro (Empathy + Social Skills)
+*Practice the Listen-Reflect-Label sequence*
+
+<lrl-practice>
+</lrl-practice>
+
+## Your 7-Day Practice Plan
+
+Based on your assessment and chosen drills:
+
+### Daily Minimums (5-10 minutes total):
+1. **STOP Log:** Use STOP once, log the situation and outcome
+2. **Values Metric:** Track your 3 micro-metrics from the Values Map
+3. **Pillar Practice:** One drill targeting your lowest pillar
+
+### Weekly Review (10 minutes on Day 7):
+- Count total STOP uses
+- Calculate average stress reduction (pre → post)
+- Note one situation where EI changed the outcome
+- Identify next week's focus based on what you learned
+
+## The Accountability Framework
+
+**Share your commitment:** Text someone these three things:
+1. Your lowest pillar score
+2. The one behavior you're practicing
+3. Your daily tracking metric
+
+**Their only job:** Ask you once on Day 4: "How's your [behavior] practice going?"
+
+That's it. Simple accountability doubles follow-through.
+
+## Red Flag Moments to Practice
+
+Look for these situations to apply your EI tools:
+- Email that makes you angry → STOP before responding
+- Meeting where you're interrupted → Use LRL
+- Deadline pressure → Run 90-second reset
+- Criticism received → Name feeling, identify need
+- Conflict arising → Propose micro-test with metric
+
+## Progress Markers
+
+You'll know you're improving when:
+- Response gap increases (pause before reacting)
+- Recovery time decreases (return to baseline faster)
+- Precision increases (more specific than "fine" or "stressed")
+- Options expand (see multiple responses, not just one)
+- Influence grows (others calm in your presence)
+
+## The Integration Challenge
+
+**This week's mission:** Use your lowest pillar skill once per day in a real situation.
+- Monday: Notice it's missing
+- Tuesday: Attempt it awkwardly
+- Wednesday: Refine based on yesterday
+- Thursday: Try in a harder situation
+- Friday: Combine with another tool
+- Weekend: Reflect and adjust
+
+## Exit Commitment
+
+Complete these statements:
+1. "My lowest pillar is **[pillar name]** with a score of **__/30**."
+2. "The specific behavior I'm practicing is **[behavior]**, measured by **[metric]**."
+3. "I'll know I'm improving when **[specific observable outcome]**."
+4. "My accountability partner is **[name]** and they'll check on **[day]**."
+
+## Homework for Next Lesson
+
+**Bring to Lesson 3:**
+- Your completed STOP logs (minimum 3)
+- Your lowest pillar and one real trigger you faced
+- One question about applying EI when you're already overwhelmed
+
+**Bonus challenge:** Teach someone the difference between two of the five pillars. Teaching consolidates learning.
+
+---
+
+*You now have your baseline, your compass, and your practice plan. The only thing left? Execute.*
+
+*Next lesson: We'll build your complete stress response toolkit for when everything hits at once.*

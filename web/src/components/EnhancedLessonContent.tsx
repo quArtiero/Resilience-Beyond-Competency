@@ -29,6 +29,10 @@ import { ChallengeReflection } from './ChallengeReflection'
 import { ChallengeStory } from './ChallengeStory'
 import { RedLineReflection } from './RedLineReflection'
 import { RedLineChallenge } from './RedLineChallenge'
+import { BaselineAssessment } from './BaselineAssessment'
+import { EmotionGranularity } from './EmotionGranularity'
+import { ValuesMap } from './ValuesMap'
+import { EICompass } from './EICompass'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -196,13 +200,119 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
-      // Lesson 5: Self-Awareness - ID 21
+      // Lesson 5: EI Foundations & Baseline - ID 21
       if (lessonId === 21) {
-        if (type === 'reflection') {
-          sections.push({ type: 'emotion-wheel' })
+        if (type === 'story') {
+          // Story tab shows the theory and framework
           sections.push({ type: 'text', content: text })
-        } else {
-          sections.push({ type: 'text', content: text })
+        } else if (type === 'reflection') {
+          // Reflection tab has the baseline assessment and exercises
+          const lines = text.split('\n')
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<baseline-assessment>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'baseline-assessment' })
+              continue
+            }
+            
+            if (line.includes('<emotion-granularity>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'emotion-granularity' })
+              continue
+            }
+            
+            if (line.includes('<values-map>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'values-map' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+        } else if (type === 'challenge') {
+          // Challenge tab has the EI Compass and drills
+          const lines = text.split('\n')
+          let currentText = ''
+          let inDrillSection = false
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            // Check if we're entering a drill section
+            if (line.includes('Practice Drills: Choose Your Training') ||
+                line.includes('Select TWO drills based on')) {
+              inDrillSection = true
+              // Add the section header but skip the drill details
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              currentText = '## Practice Drills: Choose Your Training\n\n*Select TWO drills based on your lowest pillars from your baseline assessment.*\n\n'
+              continue
+            }
+            
+            // Check if we're exiting drill section
+            if (inDrillSection && (
+                line.includes('Your 7-Day Practice Plan') ||
+                line.includes('Daily Minimums') ||
+                line.includes('The Accountability Framework'))) {
+              inDrillSection = false
+            }
+            
+            // Skip drill details
+            if (inDrillSection && (
+                line.includes('Drill 1:') || 
+                line.includes('Drill 2:') || 
+                line.includes('Drill 3:') ||
+                line.includes('If these are your weak points') ||
+                line.includes('Pre-load your responses') ||
+                line.includes('Practice the Listen-Reflect-Label'))) {
+              continue
+            }
+            
+            if (line.includes('<ei-compass>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'ei-compass' })
+              continue
+            }
+            
+            // Skip placeholder tags
+            if (line.includes('</ei-compass>') ||
+                line.includes('<body-scan-drill>') || 
+                line.includes('</body-scan-drill>') ||
+                line.includes('<if-then-builder>') || 
+                line.includes('</if-then-builder>') ||
+                line.includes('<lrl-practice>') || 
+                line.includes('</lrl-practice>')) {
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
         }
         return sections
       }
@@ -979,6 +1089,34 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return (
           <div key={index} className="my-8">
             <RedLineChallenge />
+          </div>
+        )
+      
+      case 'baseline-assessment':
+        return (
+          <div key={index} className="my-8">
+            <BaselineAssessment />
+          </div>
+        )
+      
+      case 'emotion-granularity':
+        return (
+          <div key={index} className="my-8">
+            <EmotionGranularity />
+          </div>
+        )
+      
+      case 'values-map':
+        return (
+          <div key={index} className="my-8">
+            <ValuesMap />
+          </div>
+        )
+      
+      case 'ei-compass':
+        return (
+          <div key={index} className="my-8">
+            <EICompass />
           </div>
         )
       
