@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, AlertCircle, RefreshCw, Target, Download } from 'lucide-react'
+import { BookOpen, AlertCircle, Target, Download } from 'lucide-react'
 
 interface StoryEntry {
   id: string
@@ -98,7 +98,7 @@ export function StoryRewriter() {
     return 'Filtering'
   }
 
-  const generateReframe = (belief: string, pattern: string): string => {
+  const generateReframe = (pattern: string): string => {
     const patternObj = storyPatterns.find(p => p.name === pattern)
     if (!patternObj) return ''
     
@@ -126,7 +126,7 @@ export function StoryRewriter() {
       const newEntry: StoryEntry = {
         id: Date.now().toString(),
         ...currentEntry,
-        replacementBelief: currentEntry.replacementBelief || generateReframe(currentEntry.belief, pattern),
+        replacementBelief: currentEntry.replacementBelief || generateReframe(pattern),
         timestamp: new Date().toISOString()
       }
       

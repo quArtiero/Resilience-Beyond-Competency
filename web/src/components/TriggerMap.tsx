@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { AlertTriangle, Brain, Target, Save, Download, Plus, Trash2 } from 'lucide-react'
+import { AlertTriangle, Brain, Target, Download, Plus, Trash2 } from 'lucide-react'
 
 interface TriggerEntry {
   id: string
@@ -199,7 +199,7 @@ export function TriggerMap() {
               </tr>
             </thead>
             <tbody>
-              {entries.map((entry, index) => (
+              {entries.map((entry) => (
                 <tr key={entry.id} className="border-b hover:bg-gray-50">
                   <td className="p-2">
                     <textarea
