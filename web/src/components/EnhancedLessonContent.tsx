@@ -45,6 +45,13 @@ import { RegulationIntegrationCheck } from './RegulationIntegrationCheck'
 import { ProtocolCardBuilder } from './ProtocolCardBuilder'
 import { StateSwitchTracker } from './StateSwitchTracker'
 import { RegulationExitReflection } from './RegulationExitReflection'
+import { LRLDrill } from './LRLDrill'
+import { ThreeHatsDrill } from './ThreeHatsDrill'
+import { AsyncEmpathyDrill } from './AsyncEmpathyDrill'
+import { EARPractice } from './EARPractice'
+import { EmpathyCaseSimulator } from './EmpathyCaseSimulator'
+import { EmpathyProtocolBuilder } from './EmpathyProtocolBuilder'
+import { EmpathyTracker } from './EmpathyTracker'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -384,6 +391,110 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         // For story tab, just render as text
         sections.push({ type: 'text', content: text })
         return sections
+      }
+      
+      // Lesson 5: Empathy - ID 24 (Emotional Intelligence Module)
+      if (lessonId === 24) {
+        if (type === 'reflection') {
+          // Parse for empathy drills
+          const lines = text.split('\n')
+          const sections: Section[] = []
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<lrl-drill>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'lrl-drill' })
+              continue
+            }
+            
+            if (line.includes('<three-hats-drill>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'three-hats-drill' })
+              continue
+            }
+            
+            if (line.includes('<async-empathy-drill>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'async-empathy-drill' })
+              continue
+            }
+            
+            if (line.includes('<ear-practice>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'ear-practice' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+        
+        if (type === 'challenge') {
+          // Parse for challenge components
+          const lines = text.split('\n')
+          const sections: Section[] = []
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<empathy-case-simulator>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'empathy-case-simulator' })
+              continue
+            }
+            
+            if (line.includes('<empathy-protocol-builder>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'empathy-protocol-builder' })
+              continue
+            }
+            
+            if (line.includes('<empathy-tracker>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'empathy-tracker' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
       }
       
       // Lesson 4: Self-Regulation - ID 23 (Emotional Intelligence Module)
@@ -1386,6 +1497,56 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return (
           <div key={index} className="my-8">
             <RegulationExitReflection />
+          </div>
+        )
+      
+      // Lesson 5 (Empathy) Components
+      case 'lrl-drill':
+        return (
+          <div key={index} className="my-8">
+            <LRLDrill />
+          </div>
+        )
+      
+      case 'three-hats-drill':
+        return (
+          <div key={index} className="my-8">
+            <ThreeHatsDrill />
+          </div>
+        )
+      
+      case 'async-empathy-drill':
+        return (
+          <div key={index} className="my-8">
+            <AsyncEmpathyDrill />
+          </div>
+        )
+      
+      case 'ear-practice':
+        return (
+          <div key={index} className="my-8">
+            <EARPractice />
+          </div>
+        )
+      
+      case 'empathy-case-simulator':
+        return (
+          <div key={index} className="my-8">
+            <EmpathyCaseSimulator />
+          </div>
+        )
+      
+      case 'empathy-protocol-builder':
+        return (
+          <div key={index} className="my-8">
+            <EmpathyProtocolBuilder />
+          </div>
+        )
+      
+      case 'empathy-tracker':
+        return (
+          <div key={index} className="my-8">
+            <EmpathyTracker />
           </div>
         )
       
