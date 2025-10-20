@@ -660,105 +660,133 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       // Lesson 7: EI Mastery Capstone - ID 26 (Emotional Intelligence Module)
       if (lessonId === 26) {
         if (type === 'story') {
-          // Parse for capstone components - using regex to properly handle the tags
-          let processedText = text
+          // Parse for capstone components
           const sections = []
           
-          // Replace capstone-overview tag with placeholder
-          const overviewRegex = /<capstone-overview><\/capstone-overview>/g
-          if (overviewRegex.test(processedText)) {
-            const parts = processedText.split(overviewRegex)
-            if (parts[0].trim()) {
-              sections.push({ type: 'text', content: parts[0] })
-            }
-            sections.push({ type: 'capstone-overview' })
-            processedText = parts.slice(1).join('')
-          }
+          // Replace all component tags with markers and track their positions
+          let processedText = text
+          const components = []
           
-          // Replace capstone-setup tag with placeholder
-          const setupRegex = /<capstone-setup><\/capstone-setup>/g
-          if (setupRegex.test(processedText)) {
-            const parts = processedText.split(setupRegex)
-            if (parts[0].trim()) {
-              sections.push({ type: 'text', content: parts[0] })
-            }
-            sections.push({ type: 'capstone-setup' })
-            processedText = parts.slice(1).join('')
-          }
+          // Find and replace overview
+          processedText = processedText.replace(/<capstone-overview><\/capstone-overview>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-overview', marker })
+            return marker
+          })
           
-          // Add any remaining text
-          if (processedText.trim()) {
-            sections.push({ type: 'text', content: processedText })
-          }
+          // Find and replace setup
+          processedText = processedText.replace(/<capstone-setup><\/capstone-setup>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-setup', marker })
+            return marker
+          })
+          
+          // Now split by component markers and rebuild sections
+          const parts = processedText.split(/__COMPONENT_\d+__/)
+          
+          parts.forEach((part, index) => {
+            if (part.trim()) {
+              sections.push({ type: 'text', content: part })
+            }
+            if (index < components.length) {
+              sections.push({ type: components[index].type })
+            }
+          })
           
           return sections
         }
         
         if (type === 'reflection') {
-          // Parse for reflection components - using regex to properly handle the tags
-          let processedText = text
+          // Parse for reflection components
           const sections = []
           
-          // Process each capstone tag
-          const tagMappings = [
-            { regex: /<capstone-checkins><\/capstone-checkins>/g, type: 'capstone-checkins' },
-            { regex: /<capstone-patterns><\/capstone-patterns>/g, type: 'capstone-patterns' },
-            { regex: /<capstone-iterations><\/capstone-iterations>/g, type: 'capstone-iterations' },
-            { regex: /<capstone-insights><\/capstone-insights>/g, type: 'capstone-insights' }
-          ]
+          // Replace all component tags with markers and track their positions
+          let processedText = text
+          const components = []
           
-          for (const mapping of tagMappings) {
-            const parts = processedText.split(mapping.regex)
-            if (parts.length > 1) {
-              // Add text before the tag if any
-              if (parts[0].trim()) {
-                sections.push({ type: 'text', content: parts[0] })
-              }
-              // Add the component
-              sections.push({ type: mapping.type })
-              // Continue with remaining text
-              processedText = parts.slice(1).join('')
+          // Find and replace checkins
+          processedText = processedText.replace(/<capstone-checkins><\/capstone-checkins>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-checkins', marker })
+            return marker
+          })
+          
+          // Find and replace patterns
+          processedText = processedText.replace(/<capstone-patterns><\/capstone-patterns>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-patterns', marker })
+            return marker
+          })
+          
+          // Find and replace iterations
+          processedText = processedText.replace(/<capstone-iterations><\/capstone-iterations>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-iterations', marker })
+            return marker
+          })
+          
+          // Find and replace insights
+          processedText = processedText.replace(/<capstone-insights><\/capstone-insights>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-insights', marker })
+            return marker
+          })
+          
+          // Now split by component markers and rebuild sections
+          const parts = processedText.split(/__COMPONENT_\d+__/)
+          
+          parts.forEach((part, index) => {
+            if (part.trim()) {
+              sections.push({ type: 'text', content: part })
             }
-          }
-          
-          // Add any remaining text
-          if (processedText.trim()) {
-            sections.push({ type: 'text', content: processedText })
-          }
+            if (index < components.length) {
+              sections.push({ type: components[index].type })
+            }
+          })
           
           return sections
         }
         
         if (type === 'challenge') {
-          // Parse for challenge components - using regex to properly handle the tags
-          let processedText = text
+          // Parse for challenge components
           const sections = []
           
-          // Process each capstone tag
-          const tagMappings = [
-            { regex: /<capstone-tracker><\/capstone-tracker>/g, type: 'capstone-tracker' },
-            { regex: /<capstone-progress><\/capstone-progress>/g, type: 'capstone-progress' },
-            { regex: /<capstone-submission><\/capstone-submission>/g, type: 'capstone-submission' }
-          ]
+          // Replace all component tags with markers and track their positions
+          let processedText = text
+          const components = []
           
-          for (const mapping of tagMappings) {
-            const parts = processedText.split(mapping.regex)
-            if (parts.length > 1) {
-              // Add text before the tag if any
-              if (parts[0].trim()) {
-                sections.push({ type: 'text', content: parts[0] })
-              }
-              // Add the component
-              sections.push({ type: mapping.type })
-              // Continue with remaining text
-              processedText = parts.slice(1).join('')
+          // Find and replace tracker
+          processedText = processedText.replace(/<capstone-tracker><\/capstone-tracker>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-tracker', marker })
+            return marker
+          })
+          
+          // Find and replace progress
+          processedText = processedText.replace(/<capstone-progress><\/capstone-progress>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-progress', marker })
+            return marker
+          })
+          
+          // Find and replace submission
+          processedText = processedText.replace(/<capstone-submission><\/capstone-submission>/g, () => {
+            const marker = `__COMPONENT_${components.length}__`
+            components.push({ type: 'capstone-submission', marker })
+            return marker
+          })
+          
+          // Now split by component markers and rebuild sections
+          const parts = processedText.split(/__COMPONENT_\d+__/)
+          
+          parts.forEach((part, index) => {
+            if (part.trim()) {
+              sections.push({ type: 'text', content: part })
             }
-          }
-          
-          // Add any remaining text
-          if (processedText.trim()) {
-            sections.push({ type: 'text', content: processedText })
-          }
+            if (index < components.length) {
+              sections.push({ type: components[index].type })
+            }
+          })
           
           return sections
         }
