@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { TrendingUp, CheckCircle, XCircle, Clock, BarChart, Download } from 'lucide-react'
+import { BarChart, Download } from 'lucide-react'
 
 interface DailyLog {
   date: string

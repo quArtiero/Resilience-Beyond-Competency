@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { AlertTriangle, CheckCircle, RefreshCcw, ArrowRight } from 'lucide-react'
+import { AlertTriangle, CheckCircle, RefreshCcw } from 'lucide-react'
 
 interface SBIRewrite {
   harsh: string

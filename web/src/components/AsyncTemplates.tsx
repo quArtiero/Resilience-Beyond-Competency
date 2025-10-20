@@ -185,7 +185,7 @@ export function AsyncTemplates() {
       {/* Template Selector */}
       <div className="bg-white rounded-lg shadow-md p-4">
         <div className="flex gap-2 flex-wrap">
-          {templates.map((template, index) => (
+          {templates.map((template) => (
             <button
               key={template.type}
               onClick={() => setSelectedTemplate(template.type)}
