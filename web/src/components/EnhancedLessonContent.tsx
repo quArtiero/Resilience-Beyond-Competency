@@ -52,6 +52,18 @@ import { EARPractice } from './EARPractice'
 import { EmpathyCaseSimulator } from './EmpathyCaseSimulator'
 import { EmpathyProtocolBuilder } from './EmpathyProtocolBuilder'
 import { EmpathyTracker } from './EmpathyTracker'
+import { SBIRewriter } from './SBIRewriter'
+import { RequestBuilder } from './RequestBuilder'
+import { NoOptionPractice } from './NoOptionPractice'
+import { ClearRepairWorkshop } from './ClearRepairWorkshop'
+import { AsyncTemplates } from './AsyncTemplates'
+import { CommunicationCaseSimulator } from './CommunicationCaseSimulator'
+import { CommunicationProtocolBuilder } from './CommunicationProtocolBuilder'
+import { CommunicationTracker } from './CommunicationTracker'
+import { CommunicationCommitment } from './CommunicationCommitment'
+import { CommunicationExitCommitment } from './CommunicationExitCommitment'
+import { CommunicationStoryCards } from './CommunicationStoryCards'
+import { CommunicationOverview } from './CommunicationOverview'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -483,6 +495,145 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
                 currentText = ''
               }
               sections.push({ type: 'empathy-tracker' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+      }
+      
+      // Lesson 6: Social Skills - ID 25 (Emotional Intelligence Module)
+      if (lessonId === 25) {
+        if (type === 'story') {
+          // Return the overview and custom story cards components
+          return [
+            { type: 'communication-overview' },
+            { type: 'communication-story-cards' }
+          ]
+        }
+        
+        if (type === 'reflection') {
+          // Parse for social skills drills
+          const lines = text.split('\n')
+          const sections = []
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<sbi-rewriter>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'sbi-rewriter' })
+              continue
+            }
+            
+            if (line.includes('<request-builder>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'request-builder' })
+              continue
+            }
+            
+            if (line.includes('<no-option-practice>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'no-option-practice' })
+              continue
+            }
+            
+            if (line.includes('<clear-repair-workshop>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'clear-repair-workshop' })
+              continue
+            }
+            
+            if (line.includes('<async-templates>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'async-templates' })
+              continue
+            }
+            
+            if (line.includes('<communication-commitment>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'communication-commitment' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+        
+        if (type === 'challenge') {
+          // Parse for challenge components
+          const lines = text.split('\n')
+          const sections = []
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<communication-case-simulator>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'communication-case-simulator' })
+              continue
+            }
+            
+            if (line.includes('<communication-protocol-builder>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'communication-protocol-builder' })
+              continue
+            }
+            
+            if (line.includes('<communication-tracker>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'communication-tracker' })
+              continue
+            }
+            
+            if (line.includes('<communication-exit-commitment>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'communication-exit-commitment' })
               continue
             }
             
@@ -1547,6 +1698,91 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return (
           <div key={index} className="my-8">
             <EmpathyTracker />
+          </div>
+        )
+      
+      // Lesson 6: Social Skills Components
+      case 'sbi-rewriter':
+        return (
+          <div key={index} className="my-8">
+            <SBIRewriter />
+          </div>
+        )
+      
+      case 'request-builder':
+        return (
+          <div key={index} className="my-8">
+            <RequestBuilder />
+          </div>
+        )
+      
+      case 'no-option-practice':
+        return (
+          <div key={index} className="my-8">
+            <NoOptionPractice />
+          </div>
+        )
+      
+      case 'clear-repair-workshop':
+        return (
+          <div key={index} className="my-8">
+            <ClearRepairWorkshop />
+          </div>
+        )
+      
+      case 'async-templates':
+        return (
+          <div key={index} className="my-8">
+            <AsyncTemplates />
+          </div>
+        )
+      
+      case 'communication-case-simulator':
+        return (
+          <div key={index} className="my-8">
+            <CommunicationCaseSimulator />
+          </div>
+        )
+      
+      case 'communication-protocol-builder':
+        return (
+          <div key={index} className="my-8">
+            <CommunicationProtocolBuilder />
+          </div>
+        )
+      
+      case 'communication-tracker':
+        return (
+          <div key={index} className="my-8">
+            <CommunicationTracker />
+          </div>
+        )
+      
+      case 'communication-overview':
+        return (
+          <div key={index} className="my-8">
+            <CommunicationOverview />
+          </div>
+        )
+      
+      case 'communication-story-cards':
+        return (
+          <div key={index} className="my-8">
+            <CommunicationStoryCards />
+          </div>
+        )
+      
+      case 'communication-commitment':
+        return (
+          <div key={index} className="my-8">
+            <CommunicationCommitment />
+          </div>
+        )
+      
+      case 'communication-exit-commitment':
+        return (
+          <div key={index} className="my-8">
+            <CommunicationExitCommitment />
           </div>
         )
       
