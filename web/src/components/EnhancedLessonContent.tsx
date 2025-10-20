@@ -660,138 +660,104 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       // Lesson 7: EI Mastery Capstone - ID 26 (Emotional Intelligence Module)
       if (lessonId === 26) {
         if (type === 'story') {
-          // Parse for capstone components
-          const lines = text.split('\n')
+          // Parse for capstone components - using regex to properly handle the tags
+          let processedText = text
           const sections = []
-          let currentText = ''
           
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i]
-            
-            if (line.includes('<capstone-overview>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
-              }
-              sections.push({ type: 'capstone-overview' })
-              continue
+          // Replace capstone-overview tag with placeholder
+          const overviewRegex = /<capstone-overview><\/capstone-overview>/g
+          if (overviewRegex.test(processedText)) {
+            const parts = processedText.split(overviewRegex)
+            if (parts[0].trim()) {
+              sections.push({ type: 'text', content: parts[0] })
             }
-            
-            if (line.includes('<capstone-setup>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
-              }
-              sections.push({ type: 'capstone-setup' })
-              continue
-            }
-            
-            currentText += line + '\n'
+            sections.push({ type: 'capstone-overview' })
+            processedText = parts.slice(1).join('')
           }
           
-          if (currentText.trim()) {
-            sections.push({ type: 'text', content: currentText })
+          // Replace capstone-setup tag with placeholder
+          const setupRegex = /<capstone-setup><\/capstone-setup>/g
+          if (setupRegex.test(processedText)) {
+            const parts = processedText.split(setupRegex)
+            if (parts[0].trim()) {
+              sections.push({ type: 'text', content: parts[0] })
+            }
+            sections.push({ type: 'capstone-setup' })
+            processedText = parts.slice(1).join('')
+          }
+          
+          // Add any remaining text
+          if (processedText.trim()) {
+            sections.push({ type: 'text', content: processedText })
           }
           
           return sections
         }
         
         if (type === 'reflection') {
-          // Parse for reflection components
-          const lines = text.split('\n')
+          // Parse for reflection components - using regex to properly handle the tags
+          let processedText = text
           const sections = []
-          let currentText = ''
           
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i]
-            
-            if (line.includes('<capstone-checkins>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
+          // Process each capstone tag
+          const tagMappings = [
+            { regex: /<capstone-checkins><\/capstone-checkins>/g, type: 'capstone-checkins' },
+            { regex: /<capstone-patterns><\/capstone-patterns>/g, type: 'capstone-patterns' },
+            { regex: /<capstone-iterations><\/capstone-iterations>/g, type: 'capstone-iterations' },
+            { regex: /<capstone-insights><\/capstone-insights>/g, type: 'capstone-insights' }
+          ]
+          
+          for (const mapping of tagMappings) {
+            const parts = processedText.split(mapping.regex)
+            if (parts.length > 1) {
+              // Add text before the tag if any
+              if (parts[0].trim()) {
+                sections.push({ type: 'text', content: parts[0] })
               }
-              sections.push({ type: 'capstone-checkins' })
-              continue
+              // Add the component
+              sections.push({ type: mapping.type })
+              // Continue with remaining text
+              processedText = parts.slice(1).join('')
             }
-            
-            if (line.includes('<capstone-patterns>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
-              }
-              sections.push({ type: 'capstone-patterns' })
-              continue
-            }
-            
-            if (line.includes('<capstone-iterations>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
-              }
-              sections.push({ type: 'capstone-iterations' })
-              continue
-            }
-            
-            if (line.includes('<capstone-insights>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
-              }
-              sections.push({ type: 'capstone-insights' })
-              continue
-            }
-            
-            currentText += line + '\n'
           }
           
-          if (currentText.trim()) {
-            sections.push({ type: 'text', content: currentText })
+          // Add any remaining text
+          if (processedText.trim()) {
+            sections.push({ type: 'text', content: processedText })
           }
           
           return sections
         }
         
         if (type === 'challenge') {
-          // Parse for challenge components
-          const lines = text.split('\n')
+          // Parse for challenge components - using regex to properly handle the tags
+          let processedText = text
           const sections = []
-          let currentText = ''
           
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i]
-            
-            if (line.includes('<capstone-tracker>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
+          // Process each capstone tag
+          const tagMappings = [
+            { regex: /<capstone-tracker><\/capstone-tracker>/g, type: 'capstone-tracker' },
+            { regex: /<capstone-progress><\/capstone-progress>/g, type: 'capstone-progress' },
+            { regex: /<capstone-submission><\/capstone-submission>/g, type: 'capstone-submission' }
+          ]
+          
+          for (const mapping of tagMappings) {
+            const parts = processedText.split(mapping.regex)
+            if (parts.length > 1) {
+              // Add text before the tag if any
+              if (parts[0].trim()) {
+                sections.push({ type: 'text', content: parts[0] })
               }
-              sections.push({ type: 'capstone-tracker' })
-              continue
+              // Add the component
+              sections.push({ type: mapping.type })
+              // Continue with remaining text
+              processedText = parts.slice(1).join('')
             }
-            
-            if (line.includes('<capstone-progress>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
-              }
-              sections.push({ type: 'capstone-progress' })
-              continue
-            }
-            
-            if (line.includes('<capstone-submission>')) {
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
-              }
-              sections.push({ type: 'capstone-submission' })
-              continue
-            }
-            
-            currentText += line + '\n'
           }
           
-          if (currentText.trim()) {
-            sections.push({ type: 'text', content: currentText })
+          // Add any remaining text
+          if (processedText.trim()) {
+            sections.push({ type: 'text', content: processedText })
           }
           
           return sections
