@@ -64,6 +64,15 @@ import { CommunicationCommitment } from './CommunicationCommitment'
 import { CommunicationExitCommitment } from './CommunicationExitCommitment'
 import { CommunicationStoryCards } from './CommunicationStoryCards'
 import { CommunicationOverview } from './CommunicationOverview'
+import CapstoneOverview from './CapstoneOverview'
+import CapstoneSetup from './CapstoneSetup'
+import CapstoneCheckins from './CapstoneCheckins'
+import CapstonePatterns from './CapstonePatterns'
+import CapstoneIterations from './CapstoneIterations'
+import CapstoneInsights from './CapstoneInsights'
+import CapstoneTracker from './CapstoneTracker'
+import CapstoneProgress from './CapstoneProgress'
+import CapstoneSubmission from './CapstoneSubmission'
 
 interface EnhancedLessonContentProps {
   lessonId: number
@@ -634,6 +643,147 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
                 currentText = ''
               }
               sections.push({ type: 'communication-exit-commitment' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+      }
+      
+      // Lesson 7: EI Mastery Capstone - ID 26 (Emotional Intelligence Module)
+      if (lessonId === 26) {
+        if (type === 'story') {
+          // Parse for capstone components
+          const lines = text.split('\n')
+          const sections = []
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<capstone-overview>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-overview' })
+              continue
+            }
+            
+            if (line.includes('<capstone-setup>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-setup' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+        
+        if (type === 'reflection') {
+          // Parse for reflection components
+          const lines = text.split('\n')
+          const sections = []
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<capstone-checkins>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-checkins' })
+              continue
+            }
+            
+            if (line.includes('<capstone-patterns>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-patterns' })
+              continue
+            }
+            
+            if (line.includes('<capstone-iterations>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-iterations' })
+              continue
+            }
+            
+            if (line.includes('<capstone-insights>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-insights' })
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        }
+        
+        if (type === 'challenge') {
+          // Parse for challenge components
+          const lines = text.split('\n')
+          const sections = []
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            if (line.includes('<capstone-tracker>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-tracker' })
+              continue
+            }
+            
+            if (line.includes('<capstone-progress>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-progress' })
+              continue
+            }
+            
+            if (line.includes('<capstone-submission>')) {
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              sections.push({ type: 'capstone-submission' })
               continue
             }
             
@@ -1807,6 +1957,70 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           </div>
         )
       
+      // Capstone components
+      case 'capstone-overview':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneOverview />
+          </div>
+        )
+      
+      case 'capstone-setup':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneSetup />
+          </div>
+        )
+      
+      case 'capstone-checkins':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneCheckins />
+          </div>
+        )
+      
+      case 'capstone-patterns':
+        return (
+          <div key={index} className="my-8">
+            <CapstonePatterns />
+          </div>
+        )
+      
+      case 'capstone-iterations':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneIterations />
+          </div>
+        )
+      
+      case 'capstone-insights':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneInsights />
+          </div>
+        )
+      
+      case 'capstone-tracker':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneTracker />
+          </div>
+        )
+      
+      case 'capstone-progress':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneProgress />
+          </div>
+        )
+      
+      case 'capstone-submission':
+        return (
+          <div key={index} className="my-8">
+            <CapstoneSubmission />
+          </div>
+        )
+      
       default:
         return null
     }
@@ -1877,6 +2091,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       {/* Reflection editor - only at the end (skip for lessons with their own reflection editors) */}
       {type === 'reflection' && 
        lessonId !== 20 && // Lesson 20: Has RedLineReflection with its own interactive components
+       lessonId !== 26 && // Lesson 26: Has capstone components with their own tracking
        lessonId !== 42 && // Lesson 6: Has IntegrationReflection with its own ReflectionEditor
        lessonId !== 43 && // Lesson 7: Has ChallengeReflection with its own ReflectionEditor
        (
@@ -1908,6 +2123,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       {type === 'challenge' && 
        lessonId !== 20 && // Lesson 20: Has RedLineChallenge with its own tracking system
        lessonId !== 22 && // Lesson 22: Has SelfAwarenessChallenge with its own tracking system
+       lessonId !== 26 && // Lesson 26: Has capstone components with their own tracking
        (
         <div className="mt-8 p-6 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl">
           <h3 className="text-lg font-bold text-gray-800 mb-4">🎯 Track Your Progress</h3>
