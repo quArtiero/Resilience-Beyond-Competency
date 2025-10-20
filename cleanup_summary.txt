@@ -1,0 +1,63 @@
+CODEBASE CLEANUP SUMMARY
+==================================================
+
+Files deleted: 55
+Files not found: 0
+Directories deleted: 1
+
+DELETED FILES:
+  - api/deploy_lesson1_to_render.py
+  - api/deploy_lesson2_to_render.py
+  - api/deploy_lesson3_to_render.py
+  - api/deploy_lesson3_render_simple.py
+  - api/deploy_lesson3_standalone.py
+  - api/deploy_lesson4_to_render.py
+  - api/deploy_lesson4_simple.py
+  - api/deploy_lesson4_standalone.py
+  - api/deploy_lesson5_to_render.py
+  - api/deploy_lesson5_standalone.py
+  - api/deploy_lesson6_standalone.py
+  - api/create_lesson20_render.py
+  - api/update_lesson20_render.py
+  - api/complete_lesson2_render.py
+  - api/deploy_lesson1_render.sql
+  - api/create_lesson5_render.sql
+  - api/update_lesson20.sql
+  - api/add_ei_lesson1_local.py
+  - api/add_lesson2_local.py
+  - api/add_lesson3_local.py
+  - api/add_lesson4_local.py
+  - api/add_lesson5_local.py
+  - api/add_lesson6_local.py
+  - api/update_ei_lesson1_docker.py
+  - api/add_lesson3_docker.sql
+  - api/add_lesson6_docker.sql
+  - api/add_lesson5.sql
+  - api/add_lesson3_complete.sql
+  - api/add_missing_lessons.sql
+  - api/enhance_lesson5_theory.sql
+  - api/lesson20_challenge.txt
+  - api/lesson20_quiz.json
+  - api/lesson20_reflection.txt
+  - api/lesson20_story.txt
+  - api/lesson21_challenge.txt
+  - api/lesson21_quiz.json
+  - api/lesson21_reflection.txt
+  - api/lesson21_story.txt
+  - api/check_ei_lessons.py
+  - api/check_lesson5_render.py
+  - api/check_module2_order.py
+  - api/fix_module2_order.sql
+  - api/fix_module2_ordering.py
+  - api/seed_comprehensive_course.py
+  - api/new_course_structure.py
+  - api/resilient_mastery.db
+  - DEPLOY_LESSON1_GUIDE.md
+  - DEPLOY_LESSON2_GUIDE.md
+  - DEPLOY_LESSON3_GUIDE.md
+  - DEPLOY_LESSON4_GUIDE.md
+  - DEPLOY_LESSON5_GUIDE.md
+  - DEPLOY_LESSON6_GUIDE.md
+  - DEPLOY_LESSON6_SIMPLE.md
+  - CLEANUP_REPORT.md
+  - restart_docker.sh
