@@ -129,23 +129,23 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // MODULE 2: Emotional Intelligence
       
-      // Lesson 3: Welcome to EI Module - ID 26
-      if (lessonId === 26) {
-        if (type === 'story') {
-          sections.push({
-            type: 'text',
-            content: text.substring(0, Math.min(400, text.length))
-          })
-          sections.push({ type: 'emotion-wheel' })
-          sections.push({
-            type: 'text',
-            content: text.substring(400)
-          })
-        } else {
-          sections.push({ type: 'text', content: text })
-        }
-        return sections
-      }
+      // OLD HANDLER FOR LESSON 26 - COMMENTED OUT (now handled by EI Mastery Capstone below)
+      // if (lessonId === 26) {
+      //   if (type === 'story') {
+      //     sections.push({
+      //       type: 'text',
+      //       content: text.substring(0, Math.min(400, text.length))
+      //     })
+      //     sections.push({ type: 'emotion-wheel' })
+      //     sections.push({
+      //       type: 'text',
+      //       content: text.substring(400)
+      //     })
+      //   } else {
+      //     sections.push({ type: 'text', content: text })
+      //   }
+      //   return sections
+      // }
       
       // Lesson 4: The Red Line Meeting - ID 20
       if (lessonId === 20) {
@@ -658,7 +658,9 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       }
       
       // Lesson 7: EI Mastery Capstone - ID 26 (Emotional Intelligence Module)
-      if (lessonId === 26) {
+      // Check for both string and number types
+      if (lessonId === 26 || lessonId === '26' || Number(lessonId) === 26) {
+        
         if (type === 'story') {
           // Parse for capstone components
           const sections = []
@@ -668,14 +670,16 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           const components = []
           
           // Find and replace overview
-          processedText = processedText.replace(/<capstone-overview><\/capstone-overview>/g, () => {
+          const overviewRegex = /<capstone-overview><\/capstone-overview>/g
+          processedText = processedText.replace(overviewRegex, () => {
             const marker = `__COMPONENT_${components.length}__`
             components.push({ type: 'capstone-overview', marker })
             return marker
           })
           
           // Find and replace setup
-          processedText = processedText.replace(/<capstone-setup><\/capstone-setup>/g, () => {
+          const setupRegex = /<capstone-setup><\/capstone-setup>/g
+          processedText = processedText.replace(setupRegex, () => {
             const marker = `__COMPONENT_${components.length}__`
             components.push({ type: 'capstone-setup', marker })
             return marker
@@ -703,6 +707,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           // Replace all component tags with markers and track their positions
           let processedText = text
           const components = []
+          
           
           // Find and replace checkins
           processedText = processedText.replace(/<capstone-checkins><\/capstone-checkins>/g, () => {
@@ -790,6 +795,10 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           
           return sections
         }
+        
+        // Fallback for any other type in Lesson 26
+        console.log('LESSON 26 - Fallback for type:', type)
+        return [{ type: 'text', content: text }]
       }
       
       // Lesson 4: Self-Regulation - ID 23 (Emotional Intelligence Module)
@@ -1400,6 +1409,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
   const sections = parseContent(content)
 
   const renderSection = (section: any, index: number) => {
+    // Debug logging for capstone components
+    if (section.type && section.type.includes('capstone')) {
+      console.log('RENDERING CAPSTONE COMPONENT:', section.type)
+    }
+    
     switch (section.type) {
       case 'rating-scale':
         return (
