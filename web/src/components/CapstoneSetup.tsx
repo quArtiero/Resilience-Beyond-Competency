@@ -155,7 +155,6 @@ const CapstoneSetup: React.FC = () => {
   };
 
   const generateChallengeCard = () => {
-    const selectedStack = stacks.find(s => s.value === data.stack);
     const selectedMetrics = metricOptions.filter(m => data.metrics.includes(m.value));
     
     const card = `🎯 MY 15-DAY CHALLENGE CARD
