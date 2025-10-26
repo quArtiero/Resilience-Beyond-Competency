@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, CheckCircle, Circle, Clock, TrendingUp, AlertCircle, Save, Download, Activity } from 'lucide-react';
+import { CheckCircle, Circle, Download, Activity } from 'lucide-react';
 
 interface DayLog {
   day: number;
@@ -108,7 +108,7 @@ const CapstoneTracker: React.FC = () => {
 
   const avgStressDrop = data.logs
     .filter(log => log.completed && log.stressPre && log.stressPost)
-    .reduce((acc, log, idx, arr) => {
+    .reduce((acc, log, _, arr) => {
       const drop = log.stressPre - log.stressPost;
       return acc + drop / arr.length;
     }, 0);

@@ -89,7 +89,7 @@ const CapstoneInsights: React.FC = () => {
   };
 
   const starredInsights = insights.filter(i => i.starred);
-  const recentInsights = [...insights].reverse().slice(0, 5);
+  // const recentInsights = [...insights].reverse().slice(0, 5);
 
   return (
     <div className="space-y-6 my-8">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Target, Clock, Users, TrendingUp, AlertCircle, Save, Download, RefreshCw } from 'lucide-react';
+import { AlertCircle, Download, RefreshCw } from 'lucide-react';
 
 interface SetupData {
   domain: string;

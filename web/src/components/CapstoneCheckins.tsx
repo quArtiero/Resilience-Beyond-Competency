@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, Send, CheckCircle, Calendar, TrendingUp, AlertTriangle } from 'lucide-react';
+import { MessageSquare, Send, CheckCircle, Calendar, TrendingUp } from 'lucide-react';
 
 interface CheckinData {
   day5: {
@@ -86,22 +86,28 @@ const CapstoneCheckins: React.FC = () => {
 
   const exportCheckin = (day: 'day5' | 'day10') => {
     const checkinData = data[day];
-    const text = day === 'day5' 
-      ? `DAY 5 CHECK-IN
-Date: ${new Date(checkinData.date).toLocaleDateString()}
+    let text: string;
+    
+    if (day === 'day5') {
+      const day5Data = checkinData as CheckinData['day5'];
+      text = `DAY 5 CHECK-IN
+Date: ${new Date(day5Data.date).toLocaleDateString()}
 
-Purpose this week: ${checkinData.purpose}
-Tools actually used: ${checkinData.toolsUsed}
-Metric(s) so far: ${checkinData.metrics}
-1 win: ${checkinData.win}
-1 obstacle: ${checkinData.obstacle}
-Tiny adjustment for Days 6-9: ${checkinData.adjustment}`
-      : `DAY 10 CHECK-IN
-Date: ${new Date(checkinData.date).toLocaleDateString()}
+Purpose this week: ${day5Data.purpose}
+Tools actually used: ${day5Data.toolsUsed}
+Metric(s) so far: ${day5Data.metrics}
+1 win: ${day5Data.win}
+1 obstacle: ${day5Data.obstacle}
+Tiny adjustment for Days 6-9: ${day5Data.adjustment}`;
+    } else {
+      const day10Data = checkinData as CheckinData['day10'];
+      text = `DAY 10 CHECK-IN
+Date: ${new Date(day10Data.date).toLocaleDateString()}
 
-Best EAR or SBI line that worked: ${checkinData.bestLine}
-Acceptance rate / understanding score: ${checkinData.acceptanceRate}
-One thing I'll simplify for the final sprint: ${checkinData.simplification}`;
+Best EAR or SBI line that worked: ${day10Data.bestLine}
+Acceptance rate / understanding score: ${day10Data.acceptanceRate}
+One thing I'll simplify for the final sprint: ${day10Data.simplification}`;
+    }
 
     navigator.clipboard.writeText(text);
   };

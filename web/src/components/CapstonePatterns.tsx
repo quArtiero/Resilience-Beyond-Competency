@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Brain, AlertCircle, Lightbulb, Save } from 'lucide-react';
+import { TrendingUp, Brain, Lightbulb, Save } from 'lucide-react';
 
 interface PatternData {
   triggers: string[];

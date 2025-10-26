@@ -659,15 +659,15 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // Lesson 7: EI Mastery Capstone - ID 26 (Emotional Intelligence Module)
       // Check for both string and number types
-      if (lessonId === 26 || lessonId === '26' || Number(lessonId) === 26) {
+      if (lessonId === 26 || Number(lessonId) === 26) {
         
         if (type === 'story') {
           // Parse for capstone components
-          const sections = []
+          const sections: any[] = []
           
           // Replace all component tags with markers and track their positions
           let processedText = text
-          const components = []
+          const components: any[] = []
           
           // Find and replace overview
           const overviewRegex = /<capstone-overview><\/capstone-overview>/g
@@ -702,11 +702,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         
         if (type === 'reflection') {
           // Parse for reflection components
-          const sections = []
+          const sections: any[] = []
           
           // Replace all component tags with markers and track their positions
           let processedText = text
-          const components = []
+          const components: any[] = []
           
           
           // Find and replace checkins
@@ -754,11 +754,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         
         if (type === 'challenge') {
           // Parse for challenge components
-          const sections = []
+          const sections: any[] = []
           
           // Replace all component tags with markers and track their positions
           let processedText = text
-          const components = []
+          const components: any[] = []
           
           // Find and replace tracker
           processedText = processedText.replace(/<capstone-tracker><\/capstone-tracker>/g, () => {
