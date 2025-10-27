@@ -28,6 +28,7 @@ import { ChallengeTracker } from './ChallengeTracker'
 import { ChallengeReflection } from './ChallengeReflection'
 import { ChallengeStory } from './ChallengeStory'
 import { SimpleInteractiveContent } from './SimpleInteractiveContent'
+import { EnhancedInteractiveContent } from './EnhancedInteractiveContent'
 import { RedLineReflection } from './RedLineReflection'
 import { RedLineChallenge } from './RedLineChallenge'
 import { BaselineAssessment } from './BaselineAssessment'
@@ -132,7 +133,16 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // Handle all Module 3 lessons
       if (lessonId >= 37 && lessonId <= 43) {
-        // Use SimpleInteractiveContent for reflection and challenge tabs (they have markdown formatting)
+        // Use EnhancedInteractiveContent for Lesson 38's reflection and challenge tabs
+        if (lessonId === 38 && (type === 'reflection' || type === 'challenge')) {
+          return [{
+            type: 'enhanced-interactive',
+            content: text,
+            lessonId: lessonId,
+            tabType: type
+          }]
+        }
+        // Use SimpleInteractiveContent for other lessons' reflection and challenge tabs
         if (type === 'reflection' || type === 'challenge') {
           return [{
             type: 'simple-interactive',
@@ -1441,6 +1451,17 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return (
           <div key={index} className="my-4">
             <SimpleInteractiveContent
+              content={section.content}
+              lessonId={section.lessonId}
+              tabType={section.tabType}
+              className=""
+            />
+          </div>
+        )
+      case 'enhanced-interactive':
+        return (
+          <div key={index} className="my-4">
+            <EnhancedInteractiveContent
               content={section.content}
               lessonId={section.lessonId}
               tabType={section.tabType}
