@@ -27,7 +27,7 @@ import { IntegrationReflection } from './IntegrationReflection'
 import { ChallengeTracker } from './ChallengeTracker'
 import { ChallengeReflection } from './ChallengeReflection'
 import { ChallengeStory } from './ChallengeStory'
-import { InteractiveMarkdown } from './InteractiveMarkdown'
+import { SimpleInteractiveContent } from './SimpleInteractiveContent'
 import { RedLineReflection } from './RedLineReflection'
 import { RedLineChallenge } from './RedLineChallenge'
 import { BaselineAssessment } from './BaselineAssessment'
@@ -132,10 +132,10 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // Handle all Module 3 lessons with interactive underscores
       if (lessonId >= 37 && lessonId <= 43) {
-        // Use InteractiveMarkdown for all tabs with underscores
+        // Use SimpleInteractiveContent for all tabs with underscores
         if (text.includes('_____')) {
           return [{
-            type: 'interactive-markdown',
+            type: 'simple-interactive',
             content: text,
             lessonId: lessonId,
             tabType: type
@@ -1505,10 +1505,10 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
     }
     
     switch (section.type) {
-      case 'interactive-markdown':
+      case 'simple-interactive':
         return (
           <div key={index} className="my-4">
-            <InteractiveMarkdown
+            <SimpleInteractiveContent
               content={section.content}
               lessonId={section.lessonId}
               tabType={section.tabType}
