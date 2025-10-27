@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { cn } from '@/lib/utils'
 
 interface InteractiveMarkdownProps {
   content: string
@@ -41,13 +40,13 @@ export const InteractiveMarkdown: React.FC<InteractiveMarkdownProps> = ({
   }
 
   // Process content to replace underscores with input components
-  const processContent = (text: string) => {
+  const processContent = (text: string): (string | JSX.Element)[] => {
     let fieldIndex = 0
     const parts = text.split('_____')
     
     if (parts.length === 1) {
-      // No underscores found, return as is
-      return text
+      // No underscores found, return as array with single text element
+      return [text]
     }
 
     const elements: (string | JSX.Element)[] = []
@@ -87,7 +86,7 @@ export const InteractiveMarkdown: React.FC<InteractiveMarkdownProps> = ({
         const processed = processContent(text)
         return (
           <p className="my-2">
-            {processed.map((item, idx) => 
+            {processed.map((item: string | JSX.Element, idx: number) => 
               typeof item === 'string' ? <span key={idx}>{item}</span> : item
             )}
           </p>
@@ -101,7 +100,7 @@ export const InteractiveMarkdown: React.FC<InteractiveMarkdownProps> = ({
         const processed = processContent(text)
         return (
           <li className="my-1">
-            {processed.map((item, idx) => 
+            {processed.map((item: string | JSX.Element, idx: number) => 
               typeof item === 'string' ? <span key={idx}>{item}</span> : item
             )}
           </li>
@@ -115,7 +114,7 @@ export const InteractiveMarkdown: React.FC<InteractiveMarkdownProps> = ({
         const processed = processContent(text)
         return (
           <strong>
-            {processed.map((item, idx) => 
+            {processed.map((item: string | JSX.Element, idx: number) => 
               typeof item === 'string' ? <span key={idx}>{item}</span> : item
             )}
           </strong>
@@ -125,8 +124,10 @@ export const InteractiveMarkdown: React.FC<InteractiveMarkdownProps> = ({
     }
   }
 
+  const classNames = ["prose", "prose-gray", "max-w-none", className].filter(Boolean).join(" ")
+
   return (
-    <div className={cn("prose prose-gray max-w-none", className)}>
+    <div className={classNames}>
       <ReactMarkdown components={components}>
         {content}
       </ReactMarkdown>
