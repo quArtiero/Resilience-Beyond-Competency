@@ -79,37 +79,37 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
         // Determine if this is a header, list item, or paragraph
         if (line.startsWith('###')) {
           return (
-            <h3 key={lineIdx} className="text-lg font-bold text-gray-900 mt-4 mb-2">
+            <h3 key={lineIdx} style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginTop: '16px', marginBottom: '8px' }}>
               {lineContent}
             </h3>
           )
         } else if (line.startsWith('##')) {
           return (
-            <h2 key={lineIdx} className="text-xl font-bold text-gray-900 mt-6 mb-3">
+            <h2 key={lineIdx} style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827', marginTop: '24px', marginBottom: '12px' }}>
               {lineContent}
             </h2>
           )
         } else if (line.startsWith('#')) {
           return (
-            <h1 key={lineIdx} className="text-2xl font-bold text-gray-900 mt-8 mb-4">
+            <h1 key={lineIdx} style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginTop: '32px', marginBottom: '16px' }}>
               {lineContent}
             </h1>
           )
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
           return (
-            <li key={lineIdx} className="ml-6 my-1 text-gray-700 list-disc">
+            <li key={lineIdx} style={{ marginLeft: '24px', marginTop: '4px', marginBottom: '4px', color: '#374151', listStyleType: 'disc' }}>
               {lineContent}
             </li>
           )
         } else if (line.startsWith('**') && line.endsWith('**')) {
           return (
-            <p key={lineIdx} className="my-2 font-bold text-gray-900">
+            <p key={lineIdx} style={{ marginTop: '8px', marginBottom: '8px', fontWeight: 'bold', color: '#111827' }}>
               {lineContent}
             </p>
           )
         } else {
           return (
-            <p key={lineIdx} className="my-2 text-gray-700 leading-relaxed">
+            <p key={lineIdx} style={{ marginTop: '8px', marginBottom: '8px', color: '#374151', lineHeight: '1.625' }}>
               {lineContent}
             </p>
           )
@@ -117,35 +117,66 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
       } else {
         // No underscores in this line - render as is
         if (line.startsWith('###')) {
-          return <h3 key={lineIdx} className="text-lg font-bold text-gray-900 mt-4 mb-2">{line.substring(3).trim()}</h3>
+          return <h3 key={lineIdx} style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginTop: '16px', marginBottom: '8px' }}>{line.substring(3).trim()}</h3>
         } else if (line.startsWith('##')) {
-          return <h2 key={lineIdx} className="text-xl font-bold text-gray-900 mt-6 mb-3">{line.substring(2).trim()}</h2>
+          return <h2 key={lineIdx} style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827', marginTop: '24px', marginBottom: '12px' }}>{line.substring(2).trim()}</h2>
         } else if (line.startsWith('#')) {
-          return <h1 key={lineIdx} className="text-2xl font-bold text-gray-900 mt-8 mb-4">{line.substring(1).trim()}</h1>
+          return <h1 key={lineIdx} style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginTop: '32px', marginBottom: '16px' }}>{line.substring(1).trim()}</h1>
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
-          return <li key={lineIdx} className="ml-6 my-1 text-gray-700 list-disc">{line.substring(2)}</li>
+          return <li key={lineIdx} style={{ marginLeft: '24px', marginTop: '4px', marginBottom: '4px', color: '#374151', listStyleType: 'disc' }}>{line.substring(2)}</li>
         } else if (line.startsWith('[ ]')) {
           const checkboxId = `lesson-${lessonId}-${tabType}-checkbox-${lineIdx}`
-          const isChecked = localStorage.getItem(checkboxId) === 'true'
+          const [checked, setChecked] = React.useState(() => 
+            localStorage.getItem(checkboxId) === 'true'
+          )
           return (
-            <label key={lineIdx} className="flex items-center my-2 ml-4 cursor-pointer hover:bg-gray-50 p-1 rounded">
+            <label 
+              key={lineIdx} 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                margin: '8px 0',
+                marginLeft: '16px',
+                cursor: 'pointer',
+                padding: '4px',
+                borderRadius: '4px',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = '#f9fafb';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+              }}
+            >
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
-                defaultChecked={isChecked}
-                onChange={(e) => {
-                  localStorage.setItem(checkboxId, e.target.checked.toString())
+                style={{
+                  marginRight: '8px',
+                  width: '16px',
+                  height: '16px',
+                  cursor: 'pointer',
+                  accentColor: '#3b82f6'
                 }}
+                checked={checked}
+                onChange={(e) => {
+                  const newValue = e.target.checked
+                  setChecked(newValue)
+                  localStorage.setItem(checkboxId, newValue.toString())
+                }}
+                onClick={(e) => e.stopPropagation()}
               />
-              <span className="text-gray-700">{line.substring(3).trim()}</span>
+              <span style={{ color: '#374151', fontSize: '16px' }}>
+                {line.substring(3).trim()}
+              </span>
             </label>
           )
         } else if (line.startsWith('**') && line.endsWith('**')) {
-          return <p key={lineIdx} className="my-2 font-bold text-gray-900">{line.replace(/\*\*/g, '')}</p>
+          return <p key={lineIdx} style={{ marginTop: '8px', marginBottom: '8px', fontWeight: 'bold', color: '#111827' }}>{line.replace(/\*\*/g, '')}</p>
         } else if (line.trim() === '---') {
-          return <hr key={lineIdx} className="my-6 border-gray-300" />
+          return <hr key={lineIdx} style={{ margin: '24px 0', borderColor: '#d1d5db' }} />
         } else if (line.trim()) {
-          return <p key={lineIdx} className="my-2 text-gray-700 leading-relaxed">{line}</p>
+          return <p key={lineIdx} style={{ marginTop: '8px', marginBottom: '8px', color: '#374151', lineHeight: '1.625' }}>{line}</p>
         } else {
           return <br key={lineIdx} />
         }
@@ -156,7 +187,7 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
   }
 
   return (
-    <div className={`max-w-none text-gray-800 space-y-2 ${className}`}>
+    <div style={{ maxWidth: '100%', color: '#1f2937' }}>
       {renderContent()}
     </div>
   )

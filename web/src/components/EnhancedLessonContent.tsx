@@ -1512,7 +1512,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
               content={section.content}
               lessonId={section.lessonId}
               tabType={section.tabType}
-              className="prose-sm"
+              className=""
             />
           </div>
         )
