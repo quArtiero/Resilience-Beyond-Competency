@@ -131,23 +131,19 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // Lesson 37: The Bridge in the Storm
       if (lessonId === 37) {
-        if (type === 'story') {
-          const sections: any[] = []
-          const lines = text.split('\n')
-          let currentText = ''
-          
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i]
-            
-            // Check for the rating scale section
-            if (line.includes('Rate yourself on how often you demonstrate')) {
+        try {
+          if (type === 'story') {
+            // For story, check if it contains the rating scale indicator
+            if (text.includes('Rate yourself on how often you demonstrate')) {
+              const sections: any[] = []
+              const ratingIndex = text.indexOf('Rate yourself on how often you demonstrate')
+              
               // Add text before rating
-              if (currentText.trim()) {
-                sections.push({ type: 'text', content: currentText })
-                currentText = ''
+              if (ratingIndex > 0) {
+                sections.push({ type: 'text', content: text.substring(0, ratingIndex) })
               }
               
-              // Skip to the items and collect them
+              // Add the rating scale
               const questions = [
                 { id: 'q1', text: 'I catch myself in rigid thinking patterns' },
                 { id: 'q2', text: 'I can find multiple interpretations of events' },
@@ -162,38 +158,44 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
                 questions
               })
               
-              // Skip the next few lines that contain the items
-              while (i < lines.length && (lines[i].includes('- I ') || lines[i].includes('*Rate each'))) {
-                i++
+              // Find where the rating section ends (look for next section marker)
+              const afterRatingMarkers = ['---', '## ', '### ']
+              let endIndex = text.length
+              for (const marker of afterRatingMarkers) {
+                const markerIndex = text.indexOf(marker, ratingIndex + 100)
+                if (markerIndex > 0 && markerIndex < endIndex) {
+                  endIndex = markerIndex
+                }
               }
-              i-- // Back up one since the loop will increment
-              continue
+              
+              // Add text after rating
+              if (endIndex < text.length) {
+                sections.push({ type: 'text', content: text.substring(endIndex) })
+              }
+              
+              return sections
+            }
+          } else if ((type === 'reflection' || type === 'challenge') && text.includes('_____')) {
+            // Parse content and replace underscores with interactive input fields
+            const sections: any[] = []
+            const parts = text.split('_____')
+            
+            for (let i = 0; i < parts.length; i++) {
+              if (parts[i]) {  // Don't require trim to preserve formatting
+                sections.push({ type: 'text', content: parts[i] })
+              }
+              if (i < parts.length - 1) {
+                // Add an interactive input field between parts
+                sections.push({ type: 'input-field', placeholder: 'Type your response here...' })
+              }
             }
             
-            currentText += line + '\n'
+            return sections.length > 0 ? sections : [{ type: 'text', content: text }]
           }
-          
-          if (currentText.trim()) {
-            sections.push({ type: 'text', content: currentText })
-          }
-          
-          return sections
-        } else if (type === 'reflection' || type === 'challenge') {
-          // Parse content and replace underscores with interactive input fields
-          const sections: any[] = []
-          const parts = text.split('_____')
-          
-          for (let i = 0; i < parts.length; i++) {
-            if (parts[i].trim()) {
-              sections.push({ type: 'text', content: parts[i] })
-            }
-            if (i < parts.length - 1) {
-              // Add an interactive input field between parts
-              sections.push({ type: 'input-field', placeholder: 'Type your response here...' })
-            }
-          }
-          
-          return sections
+        } catch (error) {
+          console.error('Error parsing Lesson 37 content:', error)
+          // Fallback to plain text
+          return [{ type: 'text', content: text }]
         }
       }
       
