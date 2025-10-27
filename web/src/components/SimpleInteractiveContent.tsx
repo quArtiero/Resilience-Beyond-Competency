@@ -15,10 +15,12 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
   className = ''
 }) => {
   const [values, setValues] = useState<{ [key: string]: string }>({})
+  const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({})
 
   useEffect(() => {
     // Load saved values from localStorage
     const savedValues: { [key: string]: string } = {}
+    const savedCheckboxes: { [key: string]: boolean } = {}
     let fieldIndex = 0
     const regex = /_____/g
     
@@ -31,12 +33,30 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
       fieldIndex++
     }
     
+    // Load checkbox states
+    const lines = content.split('\n')
+    lines.forEach((line, lineIdx) => {
+      if (line.startsWith('- [ ]')) {
+        const checkboxId = `lesson-${lessonId}-${tabType}-checkbox-${lineIdx}`
+        const savedState = localStorage.getItem(checkboxId)
+        if (savedState !== null) {
+          savedCheckboxes[checkboxId] = savedState === 'true'
+        }
+      }
+    })
+    
     setValues(savedValues)
+    setCheckboxStates(savedCheckboxes)
   }, [content, lessonId, tabType])
 
   const handleInputChange = (fieldId: string, value: string) => {
     setValues(prev => ({ ...prev, [fieldId]: value }))
     localStorage.setItem(fieldId, value)
+  }
+
+  const handleCheckboxChange = (checkboxId: string, checked: boolean) => {
+    setCheckboxStates(prev => ({ ...prev, [checkboxId]: checked }))
+    localStorage.setItem(checkboxId, checked.toString())
   }
 
   // Process inline markdown formatting
@@ -178,8 +198,7 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
           // Checkbox with dash
           const checkboxId = `lesson-${lessonId}-${tabType}-checkbox-${lineIdx}`
           const checkboxText = line.substring(5).trim()
-          const savedValue = localStorage.getItem(checkboxId)
-          const [checked, setChecked] = React.useState(savedValue === 'true')
+          const isChecked = checkboxStates[checkboxId] || false
           
           return (
             <label 
@@ -210,11 +229,9 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
                   cursor: 'pointer',
                   accentColor: '#3b82f6'
                 }}
-                checked={checked}
+                checked={isChecked}
                 onChange={(e) => {
-                  const newValue = e.target.checked
-                  setChecked(newValue)
-                  localStorage.setItem(checkboxId, newValue.toString())
+                  handleCheckboxChange(checkboxId, e.target.checked)
                 }}
               />
               <span style={{ color: '#374151', fontSize: '16px' }}>
