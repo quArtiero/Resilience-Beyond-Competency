@@ -199,6 +199,31 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         }
       }
       
+      // Lesson 38: What Is Cognitive Flexibility?
+      if (lessonId === 38) {
+        try {
+          // Handle story and challenge tabs that might have underscores
+          if ((type === 'story' || type === 'challenge') && text.includes('_____')) {
+            const sections: any[] = []
+            const parts = text.split('_____')
+            
+            for (let i = 0; i < parts.length; i++) {
+              if (parts[i]) {
+                sections.push({ type: 'text', content: parts[i] })
+              }
+              if (i < parts.length - 1) {
+                sections.push({ type: 'input-field', placeholder: 'Type your response here...' })
+              }
+            }
+            
+            return sections
+          }
+        } catch (error) {
+          console.error('Error parsing Lesson 38 content:', error)
+          return [{ type: 'text', content: text }]
+        }
+      }
+      
       // MODULE 2: Emotional Intelligence
       
       // OLD HANDLER FOR LESSON 26 - COMMENTED OUT (now handled by EI Mastery Capstone below)
@@ -1376,50 +1401,81 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // For lesson 12's reflection content specifically, add interactive exercises
       if (type === 'reflection' && lessonId === 38) {
-        // Extract only the intro text before the drills
-        const drill1Start = text.indexOf('## Drill 1:')
-        const miniCasesStart = text.indexOf('## Mini Cases:')
-        
-        // Add header/intro text only
-        if (drill1Start > 0) {
-          sections.push({
-            type: 'text',
-            content: text.substring(0, drill1Start)
-          })
+        try {
+          // Check if the content has the expected drill sections
+          if (text.includes('## Drill 1:') || text.includes('Frame-Spotting')) {
+            // Extract only the intro text before the drills
+            const drill1Start = text.indexOf('## Drill 1:')
+            const miniCasesStart = text.indexOf('## Mini Cases:')
+            
+            // Add header/intro text only
+            if (drill1Start > 0) {
+              sections.push({
+                type: 'text',
+                content: text.substring(0, drill1Start)
+              })
+            } else {
+              // If no drill markers, show intro up to a reasonable point
+              const introEnd = Math.min(text.length, 2000)
+              sections.push({
+                type: 'text',
+                content: text.substring(0, introEnd)
+              })
+            }
+            
+            // Add Frame-Spotting exercise (replacing Drill 1 text)
+            sections.push({
+              type: 'frame-spotting',
+              exercises: [
+                { 
+                  statement: "We have to meet in person to make this decision.",
+                  exampleMethod: "in-person meeting",
+                  examplePurpose: "high-quality decision with shared context",
+                  exampleAlternatives: ["async memo + annotated comments", "20-min video huddle with decision brief"]
+                },
+                { statement: "The launch must be on Friday or it's a failure." },
+                { statement: "If we can't afford a full data platform, we can't personalize." },
+                { statement: "I need absolute quiet to study effectively." },
+                { statement: "Without that teammate, this project can't move." }
+              ]
+            })
+            
+            // Add Alphabet-Number Switch (replacing Drill 2 text)
+            sections.push({ type: 'alphabet-number' })
+            
+            // Add 5 Uses Challenge
+            sections.push({ type: 'five-uses' })
+            
+            // Add only the Mini Cases section and beyond if it exists
+            if (miniCasesStart > 0) {
+              sections.push({
+                type: 'text',
+                content: text.substring(miniCasesStart)
+              })
+            }
+            
+            return sections
+          } else {
+            // Content doesn't have expected structure, return with input fields for underscores
+            if (text.includes('_____')) {
+              const parts = text.split('_____')
+              for (let i = 0; i < parts.length; i++) {
+                if (parts[i]) {
+                  sections.push({ type: 'text', content: parts[i] })
+                }
+                if (i < parts.length - 1) {
+                  sections.push({ type: 'input-field', placeholder: 'Type your response here...' })
+                }
+              }
+              return sections
+            }
+            // Otherwise just return as text
+            return [{ type: 'text', content: text }]
+          }
+        } catch (error) {
+          console.error('Error parsing Lesson 38 reflection:', error)
+          return [{ type: 'text', content: text }]
         }
-        
-        // Add Frame-Spotting exercise (replacing Drill 1 text)
-        sections.push({
-          type: 'frame-spotting',
-          exercises: [
-            { 
-              statement: "We have to meet in person to make this decision.",
-              exampleMethod: "in-person meeting",
-              examplePurpose: "high-quality decision with shared context",
-              exampleAlternatives: ["async memo + annotated comments", "20-min video huddle with decision brief"]
-            },
-            { statement: "The launch must be on Friday or it's a failure." },
-            { statement: "If we can't afford a full data platform, we can't personalize." },
-            { statement: "I need absolute quiet to study effectively." },
-            { statement: "Without that teammate, this project can't move." }
-          ]
-        })
-        
-        // Add Alphabet-Number Switch (replacing Drill 2 text)
-        sections.push({ type: 'alphabet-number' })
-        
-        // Add 5 Uses Challenge
-        sections.push({ type: 'five-uses' })
-        
-        // Add only the Mini Cases section and beyond if it exists
-        if (miniCasesStart > 0) {
-          sections.push({
-            type: 'text',
-            content: text.substring(miniCasesStart)
-          })
-        }
-        
-        return sections
       }
       
       // For lesson 11's reflection (or any other lesson with rating scale)
