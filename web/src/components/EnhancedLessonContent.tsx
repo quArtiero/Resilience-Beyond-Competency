@@ -127,6 +127,76 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
+      // MODULE 3: Cognitive Flexibility
+      
+      // Lesson 37: The Bridge in the Storm
+      if (lessonId === 37) {
+        if (type === 'story') {
+          const sections: any[] = []
+          const lines = text.split('\n')
+          let currentText = ''
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            
+            // Check for the rating scale section
+            if (line.includes('Rate yourself on how often you demonstrate')) {
+              // Add text before rating
+              if (currentText.trim()) {
+                sections.push({ type: 'text', content: currentText })
+                currentText = ''
+              }
+              
+              // Skip to the items and collect them
+              const questions = [
+                { id: 'q1', text: 'I catch myself in rigid thinking patterns' },
+                { id: 'q2', text: 'I can find multiple interpretations of events' },
+                { id: 'q3', text: 'I shift strategies when the first isn\'t working' },
+                { id: 'q4', text: 'I update my views with new information' },
+                { id: 'q5', text: 'I see obstacles as puzzles, not walls' }
+              ]
+              
+              sections.push({
+                type: 'rating-scale',
+                title: 'Cognitive Flexibility Self-Assessment',
+                questions
+              })
+              
+              // Skip the next few lines that contain the items
+              while (i < lines.length && (lines[i].includes('- I ') || lines[i].includes('*Rate each'))) {
+                i++
+              }
+              i-- // Back up one since the loop will increment
+              continue
+            }
+            
+            currentText += line + '\n'
+          }
+          
+          if (currentText.trim()) {
+            sections.push({ type: 'text', content: currentText })
+          }
+          
+          return sections
+        } else if (type === 'reflection' || type === 'challenge') {
+          // Parse content and replace underscores with interactive input fields
+          const sections: any[] = []
+          const parts = text.split('_____')
+          
+          for (let i = 0; i < parts.length; i++) {
+            if (parts[i].trim()) {
+              sections.push({ type: 'text', content: parts[i] })
+            }
+            if (i < parts.length - 1) {
+              // Add an interactive input field between parts
+              sections.push({ type: 'input-field', placeholder: 'Type your response here...' })
+            }
+          }
+          
+          return sections
+        }
+      }
+      
       // MODULE 2: Emotional Intelligence
       
       // OLD HANDLER FOR LESSON 26 - COMMENTED OUT (now handled by EI Mastery Capstone below)
@@ -1415,6 +1485,28 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
     }
     
     switch (section.type) {
+      case 'input-field':
+        return (
+          <div key={index} className="inline-block mx-1">
+            <input
+              type="text"
+              className="w-64 px-3 py-1 border-b-2 border-gray-300 focus:border-primary focus:outline-none transition-colors"
+              placeholder={section.placeholder || 'Type here...'}
+              onChange={(e) => {
+                // Store in local state or localStorage if needed
+                const fieldId = `lesson-${lessonId}-${type}-field-${index}`
+                localStorage.setItem(fieldId, e.target.value)
+              }}
+              defaultValue={
+                // Retrieve saved value if exists
+                typeof window !== 'undefined' 
+                  ? localStorage.getItem(`lesson-${lessonId}-${type}-field-${index}`) || ''
+                  : ''
+              }
+            />
+          </div>
+        )
+        
       case 'rating-scale':
         return (
           <div key={index} className="my-8">
