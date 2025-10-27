@@ -157,7 +157,13 @@ export const EnhancedInteractiveContent: React.FC<EnhancedInteractiveContentProp
     let sections: JSX.Element[] = []
     
     const flushSection = () => {
-      if (currentSection.length > 0) {
+      // Only create a section box if we have actual content (not just <br/> elements)
+      const hasContent = currentSection.some(element => 
+        element.type !== 'br' && 
+        (element.props?.children || element.props?.style)
+      )
+      
+      if (currentSection.length > 0 && hasContent) {
         sections.push(
           <div key={`section-${sections.length}`} style={{
             background: 'linear-gradient(to right, #faf5ff, #f3e8ff)',
@@ -170,11 +176,16 @@ export const EnhancedInteractiveContent: React.FC<EnhancedInteractiveContentProp
             {currentSection}
           </div>
         )
-        currentSection = []
       }
+      currentSection = []
     }
     
     lines.forEach((line, lineIdx) => {
+      // Skip completely empty lines at the start of sections
+      if (!line.trim() && currentSection.length === 0) {
+        return
+      }
+      
       // Check if this is a section header
       if (line.startsWith('#')) {
         flushSection()
@@ -485,9 +496,8 @@ export const EnhancedInteractiveContent: React.FC<EnhancedInteractiveContentProp
               {processedContent}
             </p>
           )
-        } else {
-          currentSection.push(<br key={lineIdx} />)
         }
+        // Skip empty lines - don't add <br/> elements
       }
     })
     
