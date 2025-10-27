@@ -74,13 +74,22 @@ async def delete_placeholders():
                     print(f"  ID: {lesson.id}, Title: {lesson.title}, Order: {lesson.order}")
             
             # Combine all potential lessons to delete
-            all_potential = set()
+            all_potential = []
             if lessons_to_check:
-                all_potential.update(lessons_to_check)
+                all_potential.extend(lessons_to_check)
             if lessons_by_id:
-                all_potential.update(lessons_by_id)
+                all_potential.extend(lessons_by_id)
             if placeholder_lessons:
-                all_potential.update(placeholder_lessons)
+                all_potential.extend(placeholder_lessons)
+            
+            # Remove duplicates based on ID
+            seen_ids = set()
+            unique_lessons = []
+            for lesson in all_potential:
+                if lesson.id not in seen_ids:
+                    seen_ids.add(lesson.id)
+                    unique_lessons.append(lesson)
+            all_potential = unique_lessons
             
             if not all_potential:
                 print("\n❌ No placeholder lessons found to delete")
