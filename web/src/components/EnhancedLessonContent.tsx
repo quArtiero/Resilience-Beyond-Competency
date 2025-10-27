@@ -27,6 +27,7 @@ import { IntegrationReflection } from './IntegrationReflection'
 import { ChallengeTracker } from './ChallengeTracker'
 import { ChallengeReflection } from './ChallengeReflection'
 import { ChallengeStory } from './ChallengeStory'
+import { InteractiveMarkdown } from './InteractiveMarkdown'
 import { RedLineReflection } from './RedLineReflection'
 import { RedLineChallenge } from './RedLineChallenge'
 import { BaselineAssessment } from './BaselineAssessment'
@@ -127,100 +128,61 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
-      // MODULE 3: Cognitive Flexibility
+      // MODULE 3: Cognitive Flexibility (Lessons 37-43)
       
-      // Lesson 37: The Bridge in the Storm
-      if (lessonId === 37) {
-        try {
-          if (type === 'story') {
-            // For story, check if it contains the rating scale indicator
-            if (text.includes('Rate yourself on how often you demonstrate')) {
-              const sections: any[] = []
-              const ratingIndex = text.indexOf('Rate yourself on how often you demonstrate')
-              
-              // Add text before rating
-              if (ratingIndex > 0) {
-                sections.push({ type: 'text', content: text.substring(0, ratingIndex) })
-              }
-              
-              // Add the rating scale
-              const questions = [
-                { id: 'q1', text: 'I catch myself in rigid thinking patterns' },
-                { id: 'q2', text: 'I can find multiple interpretations of events' },
-                { id: 'q3', text: 'I shift strategies when the first isn\'t working' },
-                { id: 'q4', text: 'I update my views with new information' },
-                { id: 'q5', text: 'I see obstacles as puzzles, not walls' }
-              ]
-              
-              sections.push({
-                type: 'rating-scale',
-                title: 'Cognitive Flexibility Self-Assessment',
-                questions
-              })
-              
-              // Find where the rating section ends (look for next section marker)
-              const afterRatingMarkers = ['---', '## ', '### ']
-              let endIndex = text.length
-              for (const marker of afterRatingMarkers) {
-                const markerIndex = text.indexOf(marker, ratingIndex + 100)
-                if (markerIndex > 0 && markerIndex < endIndex) {
-                  endIndex = markerIndex
-                }
-              }
-              
-              // Add text after rating
-              if (endIndex < text.length) {
-                sections.push({ type: 'text', content: text.substring(endIndex) })
-              }
-              
-              return sections
-            }
-          } else if ((type === 'reflection' || type === 'challenge') && text.includes('_____')) {
-            // Parse content and replace underscores with interactive input fields
-            const sections: any[] = []
-            const parts = text.split('_____')
-            
-            for (let i = 0; i < parts.length; i++) {
-              if (parts[i]) {  // Don't require trim to preserve formatting
-                sections.push({ type: 'text', content: parts[i] })
-              }
-              if (i < parts.length - 1) {
-                // Add an interactive input field between parts
-                sections.push({ type: 'input-field', placeholder: 'Type your response here...' })
-              }
-            }
-            
-            return sections.length > 0 ? sections : [{ type: 'text', content: text }]
-          }
-        } catch (error) {
-          console.error('Error parsing Lesson 37 content:', error)
-          // Fallback to plain text
-          return [{ type: 'text', content: text }]
+      // Handle all Module 3 lessons with interactive underscores
+      if (lessonId >= 37 && lessonId <= 43) {
+        // Use InteractiveMarkdown for all tabs with underscores
+        if (text.includes('_____')) {
+          return [{
+            type: 'interactive-markdown',
+            content: text,
+            lessonId: lessonId,
+            tabType: type
+          }]
         }
-      }
-      
-      // Lesson 38: What Is Cognitive Flexibility?
-      if (lessonId === 38) {
-        try {
-          // Handle story and challenge tabs that might have underscores
-          if ((type === 'story' || type === 'challenge') && text.includes('_____')) {
-            const sections: any[] = []
-            const parts = text.split('_____')
-            
-            for (let i = 0; i < parts.length; i++) {
-              if (parts[i]) {
-                sections.push({ type: 'text', content: parts[i] })
-              }
-              if (i < parts.length - 1) {
-                sections.push({ type: 'input-field', placeholder: 'Type your response here...' })
-              }
-            }
-            
-            return sections
+        
+        // Special handling for Lesson 37 story tab with rating scale
+        if (lessonId === 37 && type === 'story' && text.includes('Rate yourself on how often you demonstrate')) {
+          const sections: any[] = []
+          const ratingIndex = text.indexOf('Rate yourself on how often you demonstrate')
+          
+          // Add text before rating
+          if (ratingIndex > 0) {
+            sections.push({ type: 'text', content: text.substring(0, ratingIndex) })
           }
-        } catch (error) {
-          console.error('Error parsing Lesson 38 content:', error)
-          return [{ type: 'text', content: text }]
+          
+          // Add the rating scale
+          const questions = [
+            { id: 'q1', text: 'I catch myself in rigid thinking patterns' },
+            { id: 'q2', text: 'I can find multiple interpretations of events' },
+            { id: 'q3', text: 'I shift strategies when the first isn\'t working' },
+            { id: 'q4', text: 'I update my views with new information' },
+            { id: 'q5', text: 'I see obstacles as puzzles, not walls' }
+          ]
+          
+          sections.push({
+            type: 'rating-scale',
+            title: 'Cognitive Flexibility Self-Assessment',
+            questions
+          })
+          
+          // Find where the rating section ends
+          const afterRatingMarkers = ['---', '## ', '### ']
+          let endIndex = text.length
+          for (const marker of afterRatingMarkers) {
+            const markerIndex = text.indexOf(marker, ratingIndex + 100)
+            if (markerIndex > 0 && markerIndex < endIndex) {
+              endIndex = markerIndex
+            }
+          }
+          
+          // Add text after rating
+          if (endIndex < text.length) {
+            sections.push({ type: 'text', content: text.substring(endIndex) })
+          }
+          
+          return sections
         }
       }
       
@@ -1543,6 +1505,18 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
     }
     
     switch (section.type) {
+      case 'interactive-markdown':
+        return (
+          <div key={index} className="my-4">
+            <InteractiveMarkdown
+              content={section.content}
+              lessonId={section.lessonId}
+              tabType={section.tabType}
+              className="prose-sm"
+            />
+          </div>
+        )
+      
       case 'input-field':
         return (
           <div key={index} className="inline-block mx-1">
