@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { InteractiveInput } from './InteractiveInput'
 
 interface SimpleInteractiveContentProps {
   content: string
@@ -41,95 +42,75 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
   // Simple parsing - split by lines and process each line
   const renderContent = () => {
     const lines = content.split('\n')
-    let fieldIndex = 0
+    let globalFieldIndex = 0
     
     return lines.map((line, lineIdx) => {
       // Check if line contains underscores
       if (line.includes('_____')) {
         const parts = line.split('_____')
-        const lineElements: (string | JSX.Element)[] = []
         
-        for (let i = 0; i < parts.length; i++) {
-          if (parts[i]) {
-            lineElements.push(parts[i])
+        // Build the complete line with inputs
+        const renderLineWithInputs = () => {
+          const elements = []
+          for (let i = 0; i < parts.length; i++) {
+            if (parts[i]) {
+              elements.push(<span key={`text-${lineIdx}-${i}`}>{parts[i]}</span>)
+            }
+            
+            if (i < parts.length - 1) {
+              const fieldId = `lesson-${lessonId}-${tabType}-field-${globalFieldIndex}`
+              globalFieldIndex++
+              elements.push(
+                <InteractiveInput
+                  key={fieldId}
+                  fieldId={fieldId}
+                  value={values[fieldId] || ''}
+                  onChange={(value) => handleInputChange(fieldId, value)}
+                  placeholder="Type your response..."
+                />
+              )
+            }
           }
-          
-          if (i < parts.length - 1) {
-            const fieldId = `lesson-${lessonId}-${tabType}-field-${fieldIndex}`
-            lineElements.push(
-              <input
-                key={`${lineIdx}-${fieldIndex}`}
-                type="text"
-                className="inline-block mx-1 px-3 py-1 min-w-[200px] border-b-2 border-gray-300 focus:border-primary focus:outline-none transition-colors bg-gray-50 hover:bg-white"
-                placeholder="Type your response..."
-                value={values[fieldId] || ''}
-                onChange={(e) => handleInputChange(fieldId, e.target.value)}
-              />
-            )
-            fieldIndex++
-          }
+          return elements
         }
+        
+        const lineContent = renderLineWithInputs()
         
         // Determine if this is a header, list item, or paragraph
         if (line.startsWith('###')) {
           return (
             <h3 key={lineIdx} className="text-lg font-bold mt-4 mb-2">
-              {lineElements}
+              {lineContent}
             </h3>
           )
         } else if (line.startsWith('##')) {
           return (
             <h2 key={lineIdx} className="text-xl font-bold mt-6 mb-3">
-              {lineElements}
+              {lineContent}
             </h2>
           )
         } else if (line.startsWith('#')) {
           return (
             <h1 key={lineIdx} className="text-2xl font-bold mt-8 mb-4">
-              {lineElements}
+              {lineContent}
             </h1>
           )
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
           return (
             <li key={lineIdx} className="ml-6 my-1">
-              {lineElements}
+              {lineContent}
             </li>
           )
         } else if (line.startsWith('**') && line.endsWith('**')) {
-          // Bold text
-          const boldContent = line.replace(/\*\*/g, '')
-          const boldParts = boldContent.split('_____')
-          const boldElements: (string | JSX.Element)[] = []
-          
-          for (let i = 0; i < boldParts.length; i++) {
-            if (boldParts[i]) {
-              boldElements.push(boldParts[i])
-            }
-            
-            if (i < boldParts.length - 1) {
-              const fieldId = `lesson-${lessonId}-${tabType}-field-${fieldIndex - (parts.length - 1) + i}`
-              boldElements.push(
-                <input
-                  key={`${lineIdx}-bold-${i}`}
-                  type="text"
-                  className="inline-block mx-1 px-3 py-1 min-w-[200px] border-b-2 border-gray-300 focus:border-primary focus:outline-none transition-colors bg-gray-50 hover:bg-white font-bold"
-                  placeholder="Type your response..."
-                  value={values[fieldId] || ''}
-                  onChange={(e) => handleInputChange(fieldId, e.target.value)}
-                />
-              )
-            }
-          }
-          
           return (
             <p key={lineIdx} className="my-2 font-bold">
-              {boldElements}
+              {lineContent}
             </p>
           )
-        } else if (lineElements.length > 0) {
+        } else {
           return (
             <p key={lineIdx} className="my-2">
-              {lineElements}
+              {lineContent}
             </p>
           )
         }
