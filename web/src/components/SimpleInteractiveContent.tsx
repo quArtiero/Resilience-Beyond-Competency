@@ -79,37 +79,37 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
         // Determine if this is a header, list item, or paragraph
         if (line.startsWith('###')) {
           return (
-            <h3 key={lineIdx} className="text-lg font-bold mt-4 mb-2">
+            <h3 key={lineIdx} className="text-lg font-bold text-gray-900 mt-4 mb-2">
               {lineContent}
             </h3>
           )
         } else if (line.startsWith('##')) {
           return (
-            <h2 key={lineIdx} className="text-xl font-bold mt-6 mb-3">
+            <h2 key={lineIdx} className="text-xl font-bold text-gray-900 mt-6 mb-3">
               {lineContent}
             </h2>
           )
         } else if (line.startsWith('#')) {
           return (
-            <h1 key={lineIdx} className="text-2xl font-bold mt-8 mb-4">
+            <h1 key={lineIdx} className="text-2xl font-bold text-gray-900 mt-8 mb-4">
               {lineContent}
             </h1>
           )
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
           return (
-            <li key={lineIdx} className="ml-6 my-1">
+            <li key={lineIdx} className="ml-6 my-1 text-gray-700 list-disc">
               {lineContent}
             </li>
           )
         } else if (line.startsWith('**') && line.endsWith('**')) {
           return (
-            <p key={lineIdx} className="my-2 font-bold">
+            <p key={lineIdx} className="my-2 font-bold text-gray-900">
               {lineContent}
             </p>
           )
         } else {
           return (
-            <p key={lineIdx} className="my-2">
+            <p key={lineIdx} className="my-2 text-gray-700 leading-relaxed">
               {lineContent}
             </p>
           )
@@ -117,26 +117,35 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
       } else {
         // No underscores in this line - render as is
         if (line.startsWith('###')) {
-          return <h3 key={lineIdx} className="text-lg font-bold mt-4 mb-2">{line.substring(3).trim()}</h3>
+          return <h3 key={lineIdx} className="text-lg font-bold text-gray-900 mt-4 mb-2">{line.substring(3).trim()}</h3>
         } else if (line.startsWith('##')) {
-          return <h2 key={lineIdx} className="text-xl font-bold mt-6 mb-3">{line.substring(2).trim()}</h2>
+          return <h2 key={lineIdx} className="text-xl font-bold text-gray-900 mt-6 mb-3">{line.substring(2).trim()}</h2>
         } else if (line.startsWith('#')) {
-          return <h1 key={lineIdx} className="text-2xl font-bold mt-8 mb-4">{line.substring(1).trim()}</h1>
+          return <h1 key={lineIdx} className="text-2xl font-bold text-gray-900 mt-8 mb-4">{line.substring(1).trim()}</h1>
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
-          return <li key={lineIdx} className="ml-6 my-1">{line.substring(2)}</li>
+          return <li key={lineIdx} className="ml-6 my-1 text-gray-700 list-disc">{line.substring(2)}</li>
         } else if (line.startsWith('[ ]')) {
+          const checkboxId = `lesson-${lessonId}-${tabType}-checkbox-${lineIdx}`
+          const isChecked = localStorage.getItem(checkboxId) === 'true'
           return (
-            <label key={lineIdx} className="flex items-center my-1 ml-4">
-              <input type="checkbox" className="mr-2" />
-              <span>{line.substring(3).trim()}</span>
+            <label key={lineIdx} className="flex items-center my-2 ml-4 cursor-pointer hover:bg-gray-50 p-1 rounded">
+              <input 
+                type="checkbox" 
+                className="mr-2 w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
+                defaultChecked={isChecked}
+                onChange={(e) => {
+                  localStorage.setItem(checkboxId, e.target.checked.toString())
+                }}
+              />
+              <span className="text-gray-700">{line.substring(3).trim()}</span>
             </label>
           )
         } else if (line.startsWith('**') && line.endsWith('**')) {
-          return <p key={lineIdx} className="my-2 font-bold">{line.replace(/\*\*/g, '')}</p>
+          return <p key={lineIdx} className="my-2 font-bold text-gray-900">{line.replace(/\*\*/g, '')}</p>
         } else if (line.trim() === '---') {
-          return <hr key={lineIdx} className="my-4 border-gray-300" />
+          return <hr key={lineIdx} className="my-6 border-gray-300" />
         } else if (line.trim()) {
-          return <p key={lineIdx} className="my-2">{line}</p>
+          return <p key={lineIdx} className="my-2 text-gray-700 leading-relaxed">{line}</p>
         } else {
           return <br key={lineIdx} />
         }
@@ -147,7 +156,7 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
   }
 
   return (
-    <div className={`prose prose-gray max-w-none ${className}`}>
+    <div className={`max-w-none text-gray-800 space-y-2 ${className}`}>
       {renderContent()}
     </div>
   )
