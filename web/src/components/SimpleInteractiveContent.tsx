@@ -11,8 +11,7 @@ interface SimpleInteractiveContentProps {
 export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> = ({
   content,
   lessonId,
-  tabType,
-  className = ''
+  tabType
 }) => {
   const [values, setValues] = useState<{ [key: string]: string }>({})
   const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({})

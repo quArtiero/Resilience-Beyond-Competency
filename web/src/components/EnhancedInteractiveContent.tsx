@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { InteractiveInput } from './InteractiveInput'
 
 interface EnhancedInteractiveContentProps {
   content: string
@@ -11,8 +10,7 @@ interface EnhancedInteractiveContentProps {
 export const EnhancedInteractiveContent: React.FC<EnhancedInteractiveContentProps> = ({
   content,
   lessonId,
-  tabType,
-  className = ''
+  tabType
 }) => {
   const [values, setValues] = useState<{ [key: string]: string }>({})
   const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({})
@@ -507,7 +505,7 @@ export const EnhancedInteractiveContent: React.FC<EnhancedInteractiveContentProp
   }
 
   return (
-    <div className={className} style={{
+    <div style={{
       padding: '24px',
       background: 'linear-gradient(135deg, #ffffff, #faf5ff)',
       borderRadius: '16px',
