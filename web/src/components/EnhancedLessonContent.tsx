@@ -86,8 +86,16 @@ interface EnhancedLessonContentProps {
 export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: EnhancedLessonContentProps) {
   const [reflectionSaved, setReflectionSaved] = useState(false)
 
+  console.log('🚀 EnhancedLessonContent CALLED:', {
+    lessonId,
+    type,
+    contentLength: content?.length || 0,
+    contentPreview: content?.substring(0, 50) || 'No content'
+  })
+
   // Parse content to identify interactive sections
   const parseContent = (text: string) => {
+    console.log('📝 parseContent called for lesson:', lessonId, 'type:', type)
     try {
       const sections: any[] = []
       
@@ -133,8 +141,16 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // Handle all Module 3 lessons
       if (lessonId >= 37 && lessonId <= 43) {
+        console.log('🎯 MODULE 3 DETECTED:', {
+          lessonId,
+          type,
+          contentLength: text.length,
+          contentPreview: text.substring(0, 100)
+        })
+        
         // Use EnhancedInteractiveContent for Lesson 38
         if (lessonId === 38) {
+          console.log('📍 Using EnhancedInteractiveContent for Lesson 38')
           return [{
             type: 'enhanced-interactive',
             content: text,
@@ -142,8 +158,10 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
             tabType: type
           }]
         }
+        
         // Use SimpleInteractiveContent for all other Module 3 lessons (all tabs)
         // This ensures consistent styling across story, reflection, and challenge
+        console.log('📍 Using SimpleInteractiveContent for Module 3 lesson:', lessonId, 'tab:', type)
         return [{
           type: 'simple-interactive',
           content: text,
@@ -989,7 +1007,9 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
+      // COMMENTED OUT - Handled by generic Module 3 handler above
       // Lesson 5: Flexibility in Action - ID 41
+      /*
       if (lessonId === 41) {
         // For reflection tab, use the interactive inventory
         if (type === 'reflection') {
@@ -1082,8 +1102,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         
         return sections
       }
+      */
       
+      // COMMENTED OUT - Handled by generic Module 3 handler above
       // Lesson 7: The 7-Day Reframe Challenge - ID 43
+      /*
       if (lessonId === 43) {
         // For story tab, show both content and interactive setup
         if (type === 'story') {
@@ -1132,8 +1155,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         // For other tabs, return normal text content
         return [{ type: 'text', content: text }]
       }
+      */
       
+      // COMMENTED OUT - Handled by generic Module 3 handler above
       // Lesson 6: Reflection & Integration - ID 42
+      /*
       if (lessonId === 42) {
         if (type === 'story') {
           // Add interactive components at key points
@@ -1191,8 +1217,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         // Default fallback (shouldn't reach here)
         return [{ type: 'text', content: text }]
       }
+      */
       
+      // COMMENTED OUT - Handled by generic Module 3 handler above
       // Lesson 4: Tools for Reframing - ID 40
+      /*
       if (lessonId === 40) {
         if (type === 'story') {
           // Add tools explorer after the toolkit section
@@ -1246,8 +1275,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         }
         return sections
       }
+      */
       
+      // COMMENTED OUT - Handled by generic Module 3 handler above
       // For lesson 3 (Barriers & Biases) - ID 39
+      /*
       if (lessonId === 39) {
         if (type === 'story') {
           // Check for breathing tip section
@@ -1326,6 +1358,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           return sections
         }
       }
+      */
       
       // Removed special handling for Lesson 38 reflection - let it use the Module 3 handler
       
@@ -1372,6 +1405,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       }
       
       // Default: just return the content as text
+      console.log('⚠️ DEFAULT HANDLER REACHED for lesson:', lessonId, 'type:', type)
       sections.push({
         type: 'text',
         content: text
@@ -1386,6 +1420,7 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
   }
 
   const sections = parseContent(content)
+  console.log('📦 Sections parsed:', sections.length, 'sections for lesson:', lessonId, 'type:', type, sections.map(s => s.type))
 
   const renderSection = (section: any, index: number) => {
     // Debug logging for capstone components
@@ -1395,6 +1430,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
     
     switch (section.type) {
       case 'simple-interactive':
+        console.log('🔧 RENDERING SimpleInteractiveContent:', {
+          lessonId: section.lessonId,
+          tabType: section.tabType,
+          contentLength: section.content?.length || 0
+        })
         return (
           <div key={index} className="my-4">
             <SimpleInteractiveContent
@@ -1406,6 +1446,11 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           </div>
         )
       case 'enhanced-interactive':
+        console.log('🔧 RENDERING EnhancedInteractiveContent:', {
+          lessonId: section.lessonId,
+          tabType: section.tabType,
+          contentLength: section.content?.length || 0
+        })
         return (
           <div key={index} className="my-4">
             <EnhancedInteractiveContent
