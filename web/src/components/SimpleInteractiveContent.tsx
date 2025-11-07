@@ -13,6 +13,13 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
   lessonId,
   tabType
 }) => {
+  console.log('🎨 SimpleInteractiveContent RENDERING:', {
+    lessonId,
+    tabType,
+    contentLength: content?.length || 0,
+    contentPreview: content?.substring(0, 100)
+  })
+  
   const [values, setValues] = useState<{ [key: string]: string }>({})
   const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({})
 
@@ -96,8 +103,15 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
     let inTable = false
     let tableHeaders: string[] = []
     let tableRows: string[][] = []
+    let skipNext = false
     
     return lines.map((line, lineIdx) => {
+      // Skip lines that are part of table processing
+      if (skipNext) {
+        skipNext = false
+        return null
+      }
+      
       // Check if this is a table row
       if (line.includes('|') && line.trim().startsWith('|') && line.trim().endsWith('|')) {
         const cells = line.split('|').filter(cell => cell.trim())
@@ -111,6 +125,7 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
         // If we haven't captured headers yet, this is the header row
         if (!inTable && cells.length > 0) {
           tableHeaders = cells.map(cell => cell.trim())
+          skipNext = true // Skip the separator row that follows headers
           return null // Don't render yet, wait for complete table
         }
         
@@ -127,33 +142,45 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
                 <table style={{ 
                   width: '100%', 
                   borderCollapse: 'collapse',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb'
                 }}>
                   <thead>
-                    <tr>
+                    <tr style={{ backgroundColor: '#f9fafb' }}>
                       {tableHeaders.map((header, idx) => (
                         <th key={idx} style={{
                           borderBottom: '2px solid #e5e7eb',
-                          padding: '8px',
+                          borderRight: idx < tableHeaders.length - 1 ? '1px solid #e5e7eb' : 'none',
+                          padding: '12px',
                           textAlign: 'left',
                           fontWeight: 'bold',
-                          color: '#111827'
+                          color: '#111827',
+                          fontSize: '14px'
                         }}>
-                          {processInlineFormatting(header)}
+                          {typeof processInlineFormatting(header) === 'string' 
+                            ? processInlineFormatting(header) 
+                            : processInlineFormatting(header)}
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {tableRows.map((row, rowIdx) => (
-                      <tr key={rowIdx}>
+                      <tr key={rowIdx} style={{ 
+                        backgroundColor: rowIdx % 2 === 0 ? '#ffffff' : '#f9fafb' 
+                      }}>
                         {row.map((cell, cellIdx) => (
                           <td key={cellIdx} style={{
                             borderBottom: '1px solid #e5e7eb',
-                            padding: '8px',
-                            color: '#374151'
+                            borderRight: cellIdx < row.length - 1 ? '1px solid #e5e7eb' : 'none',
+                            padding: '12px',
+                            color: '#374151',
+                            fontSize: '14px'
                           }}>
-                            {processInlineFormatting(cell)}
+                            {typeof processInlineFormatting(cell) === 'string' 
+                              ? processInlineFormatting(cell) 
+                              : processInlineFormatting(cell)}
                           </td>
                         ))}
                       </tr>
@@ -173,8 +200,8 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
         return null
       }
       
-      // Reset table state if we hit a non-table line
-      if (inTable) {
+      // Reset table state if we hit a non-table line while in table mode
+      if (inTable && !line.includes('|')) {
         inTable = false
         tableHeaders = []
         tableRows = []
@@ -357,12 +384,21 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
       }
       
       return null
-    }).filter(Boolean)
+    }).filter(element => element !== null)
   }
 
+  const renderedContent = renderContent()
+  console.log('🎨 SimpleInteractiveContent rendered elements:', renderedContent.length, 'elements')
+  
   return (
-    <div style={{ maxWidth: '100%', color: '#1f2937' }}>
-      {renderContent()}
+    <div style={{ 
+      maxWidth: '100%', 
+      color: '#1f2937',
+      padding: '16px',
+      backgroundColor: '#ffffff',
+      borderRadius: '8px'
+    }}>
+      {renderedContent}
     </div>
   )
 }
