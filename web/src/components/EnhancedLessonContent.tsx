@@ -29,6 +29,7 @@ import { ChallengeReflection } from './ChallengeReflection'
 import { ChallengeStory } from './ChallengeStory'
 import { SimpleInteractiveContent } from './SimpleInteractiveContent'
 import { EnhancedInteractiveContent } from './EnhancedInteractiveContent'
+import { StyledInteractiveContent } from './StyledInteractiveContent'
 import { RedLineReflection } from './RedLineReflection'
 import { RedLineChallenge } from './RedLineChallenge'
 import { BaselineAssessment } from './BaselineAssessment'
@@ -151,22 +152,32 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         // Use EnhancedInteractiveContent for Lesson 38
         if (lessonId === 38) {
           console.log('📍 Using EnhancedInteractiveContent for Lesson 38')
+          console.log('📍 Content being passed:', {
+            textLength: text?.length || 0,
+            textType: typeof text,
+            textPreview: text?.substring(0, 100) || 'No text'
+          })
           return [{
             type: 'enhanced-interactive',
-            content: text,
+            content: text || '',
             lessonId: lessonId,
-            tabType: type
+            tabType: type || 'story'
           }]
         }
         
-        // Use SimpleInteractiveContent for all other Module 3 lessons (all tabs)
+        // Use StyledInteractiveContent for all other Module 3 lessons (all tabs)
         // This ensures consistent styling across story, reflection, and challenge
-        console.log('📍 Using SimpleInteractiveContent for Module 3 lesson:', lessonId, 'tab:', type)
+        console.log('📍 Using StyledInteractiveContent for Module 3 lesson:', lessonId, 'tab:', type)
+        console.log('📍 Content being passed:', {
+          textLength: text?.length || 0,
+          textType: typeof text,
+          textPreview: text?.substring(0, 100) || 'No text'
+        })
         return [{
-          type: 'simple-interactive',
-          content: text,
+          type: 'styled-interactive',
+          content: text || '',
           lessonId: lessonId,
-          tabType: type
+          tabType: type || 'story'
         }]
       }
       
@@ -1433,11 +1444,43 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         console.log('🔧 RENDERING SimpleInteractiveContent:', {
           lessonId: section.lessonId,
           tabType: section.tabType,
-          contentLength: section.content?.length || 0
+          contentLength: section.content?.length || 0,
+          hasContent: !!section.content,
+          contentType: typeof section.content
         })
+        
+        if (!section.content) {
+          console.error('❌ No content for SimpleInteractiveContent!')
+          return <div key={index}>No content available</div>
+        }
+        
         return (
-          <div key={index} className="my-4">
+          <div key={index} style={{ marginTop: '16px', marginBottom: '16px' }}>
             <SimpleInteractiveContent
+              content={section.content}
+              lessonId={section.lessonId}
+              tabType={section.tabType}
+              className=""
+            />
+          </div>
+        )
+      case 'styled-interactive':
+        console.log('🔧 RENDERING StyledInteractiveContent:', {
+          lessonId: section.lessonId,
+          tabType: section.tabType,
+          contentLength: section.content?.length || 0,
+          hasContent: !!section.content,
+          contentType: typeof section.content
+        })
+        
+        if (!section.content) {
+          console.error('❌ No content for StyledInteractiveContent!')
+          return <div key={index}>No content available</div>
+        }
+        
+        return (
+          <div key={index} style={{ marginTop: '16px', marginBottom: '16px' }}>
+            <StyledInteractiveContent
               content={section.content}
               lessonId={section.lessonId}
               tabType={section.tabType}
@@ -1449,8 +1492,16 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         console.log('🔧 RENDERING EnhancedInteractiveContent:', {
           lessonId: section.lessonId,
           tabType: section.tabType,
-          contentLength: section.content?.length || 0
+          contentLength: section.content?.length || 0,
+          hasContent: !!section.content,
+          contentType: typeof section.content
         })
+        
+        if (!section.content) {
+          console.error('❌ No content for EnhancedInteractiveContent!')
+          return <div key={index}>No content available</div>
+        }
+        
         return (
           <div key={index} className="my-4">
             <EnhancedInteractiveContent

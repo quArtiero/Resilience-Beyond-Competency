@@ -81,7 +81,7 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
       }
       // Add bold text
       elements.push(
-        <strong key={`bold-${match.index}`} style={{ fontWeight: 'bold', color: '#111827' }}>
+        <strong key={`bold-${match.index}`}>
           {match[1]}
         </strong>
       )
@@ -247,31 +247,31 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
         const cleanLine = line.replace(/\*\*/g, '').replace(/_____/g, '')
         if (cleanLine.startsWith('###')) {
           return (
-            <h3 key={lineIdx} style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginTop: '16px', marginBottom: '8px' }}>
+            <h3 key={lineIdx}>
               {lineContent}
             </h3>
           )
         } else if (cleanLine.startsWith('##')) {
           return (
-            <h2 key={lineIdx} style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827', marginTop: '24px', marginBottom: '12px' }}>
+            <h2 key={lineIdx}>
               {lineContent}
             </h2>
           )
         } else if (cleanLine.startsWith('#')) {
           return (
-            <h1 key={lineIdx} style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginTop: '32px', marginBottom: '16px' }}>
+            <h1 key={lineIdx}>
               {lineContent}
             </h1>
           )
         } else if (cleanLine.startsWith('- ') || cleanLine.startsWith('* ')) {
           return (
-            <li key={lineIdx} style={{ marginLeft: '24px', marginTop: '4px', marginBottom: '4px', color: '#374151', listStyleType: 'disc' }}>
+            <li key={lineIdx}>
               {lineContent}
             </li>
           )
         } else {
           return (
-            <p key={lineIdx} style={{ marginTop: '8px', marginBottom: '8px', color: '#374151', lineHeight: '1.625' }}>
+            <p key={lineIdx}>
               {lineContent}
             </p>
           )
@@ -286,21 +286,21 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
         if (cleanLine.startsWith('###')) {
           const content = processInlineFormatting(cleanLine.substring(3).trim())
           return (
-            <h3 key={lineIdx} style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginTop: '16px', marginBottom: '8px' }}>
+            <h3 key={lineIdx}>
               {content}
             </h3>
           )
         } else if (cleanLine.startsWith('##')) {
           const content = processInlineFormatting(cleanLine.substring(2).trim())
           return (
-            <h2 key={lineIdx} style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827', marginTop: '24px', marginBottom: '12px' }}>
+            <h2 key={lineIdx}>
               {content}
             </h2>
           )
         } else if (cleanLine.startsWith('#')) {
           const content = processInlineFormatting(cleanLine.substring(1).trim())
           return (
-            <h1 key={lineIdx} style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginTop: '32px', marginBottom: '16px' }}>
+            <h1 key={lineIdx}>
               {content}
             </h1>
           )
@@ -352,29 +352,22 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
         } else if (cleanLine.startsWith('> ')) {
           const content = processInlineFormatting(line.substring(2))
           return (
-            <blockquote key={lineIdx} style={{ 
-              borderLeft: '4px solid #d1d5db', 
-              paddingLeft: '16px', 
-              marginTop: '12px', 
-              marginBottom: '12px',
-              fontStyle: 'italic',
-              color: '#4b5563'
-            }}>
+            <blockquote key={lineIdx}>
               {content}
             </blockquote>
           )
         } else if (cleanLine.startsWith('- ') || cleanLine.startsWith('* ')) {
           const content = processInlineFormatting(line.substring(2))
           return (
-            <li key={lineIdx} style={{ marginLeft: '24px', marginTop: '4px', marginBottom: '4px', color: '#374151', listStyleType: 'disc' }}>
+            <li key={lineIdx}>
               {content}
             </li>
           )
         } else if (line.trim() === '---') {
-          return <hr key={lineIdx} style={{ margin: '24px 0', borderColor: '#d1d5db' }} />
+          return <hr key={lineIdx} />
         } else if (line.trim()) {
           return (
-            <p key={lineIdx} style={{ marginTop: '8px', marginBottom: '8px', color: '#374151', lineHeight: '1.625' }}>
+            <p key={lineIdx}>
               {processedContent}
             </p>
           )
@@ -391,13 +384,82 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
   console.log('🎨 SimpleInteractiveContent rendered elements:', renderedContent.length, 'elements')
   
   return (
-    <div style={{ 
-      maxWidth: '100%', 
-      color: '#1f2937',
-      padding: '16px',
-      backgroundColor: '#ffffff',
-      borderRadius: '8px'
-    }}>
+    <div className="simple-interactive-content">
+      <style>{`
+        .simple-interactive-content {
+          max-width: 100%;
+          color: #1f2937;
+          padding: 16px;
+          background-color: #ffffff;
+          border-radius: 8px;
+        }
+        .simple-interactive-content h1 {
+          font-size: 2rem !important;
+          font-weight: 700 !important;
+          color: #111827 !important;
+          margin-top: 32px !important;
+          margin-bottom: 16px !important;
+        }
+        .simple-interactive-content h2 {
+          font-size: 1.5rem !important;
+          font-weight: 600 !important;
+          color: #1f2937 !important;
+          margin-top: 24px !important;
+          margin-bottom: 12px !important;
+        }
+        .simple-interactive-content h3 {
+          font-size: 1.25rem !important;
+          font-weight: 600 !important;
+          color: #374151 !important;
+          margin-top: 20px !important;
+          margin-bottom: 8px !important;
+        }
+        .simple-interactive-content p {
+          margin-top: 8px !important;
+          margin-bottom: 8px !important;
+          color: #4b5563 !important;
+          line-height: 1.625 !important;
+        }
+        .simple-interactive-content strong {
+          font-weight: 700 !important;
+          color: #111827 !important;
+        }
+        .simple-interactive-content li {
+          margin-left: 24px !important;
+          margin-top: 4px !important;
+          margin-bottom: 4px !important;
+          color: #374151 !important;
+          list-style-type: disc !important;
+        }
+        .simple-interactive-content blockquote {
+          border-left: 4px solid #d1d5db !important;
+          padding-left: 16px !important;
+          margin-top: 12px !important;
+          margin-bottom: 12px !important;
+          font-style: italic !important;
+          color: #6b7280 !important;
+        }
+        .simple-interactive-content hr {
+          margin: 24px 0 !important;
+          border-color: #e5e7eb !important;
+        }
+        .simple-interactive-content table {
+          width: 100% !important;
+          border-collapse: collapse !important;
+          margin: 16px 0 !important;
+        }
+        .simple-interactive-content th {
+          background-color: #f9fafb !important;
+          border: 1px solid #e5e7eb !important;
+          padding: 12px !important;
+          text-align: left !important;
+          font-weight: 600 !important;
+        }
+        .simple-interactive-content td {
+          border: 1px solid #e5e7eb !important;
+          padding: 12px !important;
+        }
+      `}</style>
       {renderedContent}
     </div>
   )
