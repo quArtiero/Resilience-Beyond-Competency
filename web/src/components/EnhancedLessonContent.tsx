@@ -30,6 +30,7 @@ import { ChallengeStory } from './ChallengeStory'
 import { SimpleInteractiveContent } from './SimpleInteractiveContent'
 import { EnhancedInteractiveContent } from './EnhancedInteractiveContent'
 import { StyledInteractiveContent } from './StyledInteractiveContent'
+import { BasicStyledContent } from './BasicStyledContent'
 import { RedLineReflection } from './RedLineReflection'
 import { RedLineChallenge } from './RedLineChallenge'
 import { BaselineAssessment } from './BaselineAssessment'
@@ -165,16 +166,16 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           }]
         }
         
-        // Use StyledInteractiveContent for all other Module 3 lessons (all tabs)
+        // Use BasicStyledContent for all other Module 3 lessons (all tabs)
         // This ensures consistent styling across story, reflection, and challenge
-        console.log('📍 Using StyledInteractiveContent for Module 3 lesson:', lessonId, 'tab:', type)
+        console.log('📍 Using BasicStyledContent for Module 3 lesson:', lessonId, 'tab:', type)
         console.log('📍 Content being passed:', {
           textLength: text?.length || 0,
           textType: typeof text,
           textPreview: text?.substring(0, 100) || 'No text'
         })
         return [{
-          type: 'styled-interactive',
+          type: 'basic-styled',
           content: text || '',
           lessonId: lessonId,
           tabType: type || 'story'
@@ -1457,6 +1458,23 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return (
           <div key={index} style={{ marginTop: '16px', marginBottom: '16px' }}>
             <SimpleInteractiveContent
+              content={section.content}
+              lessonId={section.lessonId}
+              tabType={section.tabType}
+              className=""
+            />
+          </div>
+        )
+      case 'basic-styled':
+        console.log('🔧 RENDERING BasicStyledContent:', {
+          lessonId: section.lessonId,
+          tabType: section.tabType,
+          contentLength: section.content?.length || 0
+        })
+        
+        return (
+          <div key={index} style={{ marginTop: '16px', marginBottom: '16px' }}>
+            <BasicStyledContent
               content={section.content}
               lessonId={section.lessonId}
               tabType={section.tabType}

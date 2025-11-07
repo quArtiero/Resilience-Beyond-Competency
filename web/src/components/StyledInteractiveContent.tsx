@@ -13,6 +13,13 @@ export const StyledInteractiveContent: React.FC<StyledInteractiveContentProps> =
   lessonId,
   tabType
 }) => {
+  console.log('🎨 StyledInteractiveContent RENDERING:', {
+    lessonId,
+    tabType,
+    contentLength: content?.length || 0,
+    contentPreview: content?.substring(0, 100)
+  })
+  
   const [values, setValues] = useState<{ [key: string]: string }>({})
   const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({})
 
@@ -245,13 +252,14 @@ export const StyledInteractiveContent: React.FC<StyledInteractiveContentProps> =
         
         elements.push(
           <HeadingTag key={lineIdx} style={{
-            fontSize,
-            fontWeight: level === 1 ? '800' : '700',
-            color,
-            marginTop,
-            marginBottom: '12px',
-            lineHeight: '1.2'
-          }}>
+            fontSize: `${fontSize} !important`,
+            fontWeight: `${level === 1 ? '800' : '700'} !important`,
+            color: `${color} !important`,
+            marginTop: `${marginTop} !important`,
+            marginBottom: '12px !important',
+            lineHeight: '1.2 !important',
+            display: 'block !important'
+          } as React.CSSProperties}>
             {text}
           </HeadingTag>
         )
@@ -308,7 +316,38 @@ export const StyledInteractiveContent: React.FC<StyledInteractiveContentProps> =
       
       // Handle regular paragraphs with bold text
       if (line.trim()) {
-        const processedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 700; color: #111827;">$1</strong>')
+        // Process bold text manually
+        const parts: (string | JSX.Element)[] = []
+        let lastIndex = 0
+        const boldRegex = /\*\*(.*?)\*\*/g
+        let match
+        
+        while ((match = boldRegex.exec(line)) !== null) {
+          // Add text before bold
+          if (match.index > lastIndex) {
+            parts.push(line.substring(lastIndex, match.index))
+          }
+          // Add bold text
+          parts.push(
+            <strong key={`bold-${lineIdx}-${match.index}`} style={{
+              fontWeight: '700',
+              color: '#111827'
+            }}>
+              {match[1]}
+            </strong>
+          )
+          lastIndex = match.index + match[0].length
+        }
+        
+        // Add remaining text
+        if (lastIndex < line.length) {
+          parts.push(line.substring(lastIndex))
+        }
+        
+        // If no bold text was found, just use the line as is
+        if (parts.length === 0) {
+          parts.push(line)
+        }
         
         elements.push(
           <p key={lineIdx} style={{
@@ -317,7 +356,9 @@ export const StyledInteractiveContent: React.FC<StyledInteractiveContentProps> =
             marginTop: '8px',
             marginBottom: '8px',
             lineHeight: '1.6'
-          }} dangerouslySetInnerHTML={{ __html: processedLine }} />
+          }}>
+            {parts}
+          </p>
         )
       }
     })
@@ -325,6 +366,19 @@ export const StyledInteractiveContent: React.FC<StyledInteractiveContentProps> =
     return elements
   }
 
+  const renderedElements = renderContent()
+  console.log('🎨 StyledInteractiveContent rendered:', renderedElements.length, 'elements')
+  
+  // Debug: Log first few elements to see what they contain
+  renderedElements.slice(0, 3).forEach((el, i) => {
+    console.log(`Element ${i}:`, {
+      type: el?.type,
+      key: el?.key,
+      props: el?.props,
+      content: el?.props?.children
+    })
+  })
+  
   return (
     <div style={{
       maxWidth: '100%',
@@ -332,9 +386,24 @@ export const StyledInteractiveContent: React.FC<StyledInteractiveContentProps> =
       backgroundColor: '#ffffff',
       borderRadius: '12px',
       boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+      border: '3px solid #10b981',  // Add green border for visibility
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
     }}>
-      {renderContent()}
+      <div style={{ color: '#ef4444', fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
+        TEST: StyledInteractiveContent with {renderedElements.length} elements
+      </div>
+      <div style={{ border: '2px solid blue', padding: '10px', marginBottom: '20px' }}>
+        <h2 style={{ color: '#000000', fontSize: '28px', fontWeight: 'bold' }}>
+          Testing Direct Style - This Should Be Big and Black
+        </h2>
+        <p style={{ color: '#ff0000', fontSize: '20px' }}>
+          This paragraph should be red and 20px
+        </p>
+        <p style={{ color: '#0000ff', fontSize: '16px' }}>
+          This paragraph should be blue and 16px
+        </p>
+      </div>
+      {renderedElements}
     </div>
   )
 }
