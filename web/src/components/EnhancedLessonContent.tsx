@@ -133,8 +133,8 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // Handle all Module 3 lessons
       if (lessonId >= 37 && lessonId <= 43) {
-        // Use EnhancedInteractiveContent for Lesson 38's reflection and challenge tabs
-        if (lessonId === 38 && (type === 'reflection' || type === 'challenge')) {
+        // Use EnhancedInteractiveContent for Lesson 38
+        if (lessonId === 38) {
           return [{
             type: 'enhanced-interactive',
             content: text,
@@ -142,67 +142,14 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
             tabType: type
           }]
         }
-        // Use SimpleInteractiveContent for other lessons' reflection and challenge tabs
-        if (type === 'reflection' || type === 'challenge') {
-          return [{
-            type: 'simple-interactive',
-            content: text,
-            lessonId: lessonId,
-            tabType: type
-          }]
-        }
-        // For story tab, only use SimpleInteractiveContent if it has underscores
-        if (type === 'story' && text.includes('_____')) {
-          return [{
-            type: 'simple-interactive',
-            content: text,
-            lessonId: lessonId,
-            tabType: type
-          }]
-        }
-        
-        // Special handling for Lesson 37 story tab with rating scale
-        if (lessonId === 37 && type === 'story' && text.includes('Rate yourself on how often you demonstrate')) {
-          const sections: any[] = []
-          const ratingIndex = text.indexOf('Rate yourself on how often you demonstrate')
-          
-          // Add text before rating
-          if (ratingIndex > 0) {
-            sections.push({ type: 'text', content: text.substring(0, ratingIndex) })
-          }
-          
-          // Add the rating scale
-          const questions = [
-            { id: 'q1', text: 'I catch myself in rigid thinking patterns' },
-            { id: 'q2', text: 'I can find multiple interpretations of events' },
-            { id: 'q3', text: 'I shift strategies when the first isn\'t working' },
-            { id: 'q4', text: 'I update my views with new information' },
-            { id: 'q5', text: 'I see obstacles as puzzles, not walls' }
-          ]
-          
-          sections.push({
-            type: 'rating-scale',
-            title: 'Cognitive Flexibility Self-Assessment',
-            questions
-          })
-          
-          // Find where the rating section ends
-          const afterRatingMarkers = ['---', '## ', '### ']
-          let endIndex = text.length
-          for (const marker of afterRatingMarkers) {
-            const markerIndex = text.indexOf(marker, ratingIndex + 100)
-            if (markerIndex > 0 && markerIndex < endIndex) {
-              endIndex = markerIndex
-            }
-          }
-          
-          // Add text after rating
-          if (endIndex < text.length) {
-            sections.push({ type: 'text', content: text.substring(endIndex) })
-          }
-          
-          return sections
-        }
+        // Use SimpleInteractiveContent for all other Module 3 lessons (all tabs)
+        // This ensures consistent styling across story, reflection, and challenge
+        return [{
+          type: 'simple-interactive',
+          content: text,
+          lessonId: lessonId,
+          tabType: type
+        }]
       }
       
       // MODULE 2: Emotional Intelligence

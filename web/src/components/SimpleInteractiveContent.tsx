@@ -93,8 +93,92 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
   const renderContent = () => {
     const lines = content.split('\n')
     let globalFieldIndex = 0
+    let inTable = false
+    let tableHeaders: string[] = []
+    let tableRows: string[][] = []
     
     return lines.map((line, lineIdx) => {
+      // Check if this is a table row
+      if (line.includes('|') && line.trim().startsWith('|') && line.trim().endsWith('|')) {
+        const cells = line.split('|').filter(cell => cell.trim())
+        
+        // Check if it's a separator row (like |---|---|)
+        if (cells.every(cell => cell.trim().match(/^-+$/))) {
+          inTable = true
+          return null // Don't render separator row
+        }
+        
+        // If we haven't captured headers yet, this is the header row
+        if (!inTable && cells.length > 0) {
+          tableHeaders = cells.map(cell => cell.trim())
+          return null // Don't render yet, wait for complete table
+        }
+        
+        // This is a data row
+        if (inTable) {
+          tableRows.push(cells.map(cell => cell.trim()))
+          
+          // Check if next line is not a table row to render the complete table
+          const nextLine = lines[lineIdx + 1]
+          if (!nextLine || !nextLine.includes('|') || !nextLine.trim().startsWith('|')) {
+            // Render the complete table
+            const table = (
+              <div key={`table-${lineIdx}`} style={{ overflowX: 'auto', marginTop: '16px', marginBottom: '16px' }}>
+                <table style={{ 
+                  width: '100%', 
+                  borderCollapse: 'collapse',
+                  fontSize: '14px'
+                }}>
+                  <thead>
+                    <tr>
+                      {tableHeaders.map((header, idx) => (
+                        <th key={idx} style={{
+                          borderBottom: '2px solid #e5e7eb',
+                          padding: '8px',
+                          textAlign: 'left',
+                          fontWeight: 'bold',
+                          color: '#111827'
+                        }}>
+                          {processInlineFormatting(header)}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableRows.map((row, rowIdx) => (
+                      <tr key={rowIdx}>
+                        {row.map((cell, cellIdx) => (
+                          <td key={cellIdx} style={{
+                            borderBottom: '1px solid #e5e7eb',
+                            padding: '8px',
+                            color: '#374151'
+                          }}>
+                            {processInlineFormatting(cell)}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+            // Reset table tracking
+            inTable = false
+            tableHeaders = []
+            tableRows = []
+            return table
+          }
+          return null // Don't render individual rows
+        }
+        return null
+      }
+      
+      // Reset table state if we hit a non-table line
+      if (inTable) {
+        inTable = false
+        tableHeaders = []
+        tableRows = []
+      }
       // Check if line contains underscores
       if (line.includes('_____')) {
         const parts = line.split('_____')
@@ -237,6 +321,20 @@ export const SimpleInteractiveContent: React.FC<SimpleInteractiveContentProps> =
                 {processInlineFormatting(checkboxText)}
               </span>
             </label>
+          )
+        } else if (cleanLine.startsWith('> ')) {
+          const content = processInlineFormatting(line.substring(2))
+          return (
+            <blockquote key={lineIdx} style={{ 
+              borderLeft: '4px solid #d1d5db', 
+              paddingLeft: '16px', 
+              marginTop: '12px', 
+              marginBottom: '12px',
+              fontStyle: 'italic',
+              color: '#4b5563'
+            }}>
+              {content}
+            </blockquote>
           )
         } else if (cleanLine.startsWith('- ') || cleanLine.startsWith('* ')) {
           const content = processInlineFormatting(line.substring(2))
