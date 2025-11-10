@@ -150,23 +150,23 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           contentPreview: text.substring(0, 100)
         })
         
-        // Use EnhancedInteractiveContent for Lesson 38
+        // Use BasicStyledContent for Lesson 38 (same as other Module 3 lessons)
         if (lessonId === 38) {
-          console.log('📍 Using EnhancedInteractiveContent for Lesson 38')
+          console.log('📍 Using BasicStyledContent for Lesson 38')
           console.log('📍 Content being passed:', {
             textLength: text?.length || 0,
             textType: typeof text,
             textPreview: text?.substring(0, 100) || 'No text'
           })
           return [{
-            type: 'enhanced-interactive',
+            type: 'basic-styled',
             content: text || '',
             lessonId: lessonId,
             tabType: type || 'story'
           }]
         }
         
-        // Use BasicStyledContent for all other Module 3 lessons (all tabs)
+        // Use BasicStyledContent for all Module 3 lessons (all tabs)
         // This ensures consistent styling across story, reflection, and challenge
         console.log('📍 Using BasicStyledContent for Module 3 lesson:', lessonId, 'tab:', type)
         console.log('📍 Content being passed:', {
