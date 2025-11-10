@@ -1,0 +1,168 @@
+================================================================================
+COMPREHENSIVE CHALLENGE CONTENT ANALYSIS
+Generated: 2025-11-10 13:34:57
+================================================================================
+
+
+============================================================
+MODULE 1: Introduction to Resilience
+============================================================
+
+Lesson 1: Overview of Resilience & Competency
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ✅
+  Preview: No content
+
+Lesson 2: Goals of the Course
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ✅
+  Preview: No content
+
+============================================================
+MODULE 2: Emotional Intelligence
+============================================================
+
+Lesson 20: The Red Line Meeting
+  Status: ✅ FULL (5556 chars) 
+  Story: ✅ | Reflection: ✅
+  Preview: # Challenge: Your 7-Day EI Sprint  ## The Red Line Protocol in Real Life  This week, you'll build yo...
+
+Lesson 21: EI Foundations & Baseline
+  Status: ✅ FULL (3072 chars) ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: ## Your EI Operating System: Building the Compass  ### Creating Your Personal EI Compass *15-20 minu...
+
+Lesson 22: Self-Awareness: Triggers, Body Signals & Stories
+  Status: 📄 SHORT (54 chars) 
+  Story: ✅ | Reflection: ✅
+  Preview: ## Your Self-Awareness Lab  <self-awareness-challenge>
+
+Lesson 23: Self-Regulation: Calm on Command
+  Status: 📋 MEDIUM (642 chars) ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: ## Your Regulation Challenge Lab  ### Part 1: If-Then Plan Factory  <if-then-planner>  ### Part 2: M...
+
+Lesson 24: Empathy: Read, Reflect, Relate
+  Status: 📋 MEDIUM (1031 chars) ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: ## Your Empathy Challenge Suite  ### Mini-Case Simulations  <empathy-case-simulator>  ### Build Your...
+
+Lesson 25: Social Skills: Clear, Kind, Direct Communication
+  Status: 📋 MEDIUM (1930 chars) 
+  Story: ✅ | Reflection: ✅
+  Preview: ## Your Communication Challenge  ### 🚀 From Practice to Performance  You've learned the theory. You'...
+
+Lesson 26: EI Mastery Capstone: 15-Day Plan with Metrics
+  Status: 📋 MEDIUM (1452 chars) 
+  Story: ✅ | Reflection: ✅
+  Preview: # 🏆 Your 15-Day Challenge Headquarters  <capstone-tracker></capstone-tracker>  ## 📈 Progress Visuali...
+
+============================================================
+MODULE 3: Cognitive Flexibility
+============================================================
+
+Lesson 37: The Bridge in the Storm
+  Status: ✅ FULL (2252 chars) ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: # 🎯 7-Day Cognitive Flexibility Challenge  ## Your Mission  Transform your mental rigidity into cogn...
+
+Lesson 38: What Is Cognitive Flexibility?
+  Status: ✅ FULL (3729 chars) ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: # 🎯 The Cognitive Flexibility Bootcamp  ## Your 7-Day Mental Agility Challenge  Each day, you'll pra...
+
+Lesson 39: Barriers & Biases
+  Status: ✅ FULL (4469 chars) ☑️ ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: # Challenge: The 5-Day Bias Detox  ## Your Mission  For the next 5 days, you'll identify and interru...
+
+Lesson 40: Tools for Reframing
+  Status: ✅ FULL (4944 chars) ☑️ ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: # Challenge: The 7-Day Reframe Revolution  ## Your Mission  Transform one major life area by systema...
+
+Lesson 41: Flexibility in Action
+  Status: ✅ FULL (5551 chars) ☑️ ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: # Challenge: The Flexibility Olympics  ## Your Training Ground  For the next 7 days, you'll compete ...
+
+Lesson 42: Reflection & Integration
+  Status: ✅ FULL (5948 chars) ☑️ ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: # The 90-Day Flexibility Transformation Challenge  ## Your Mission  Transform into a flexibility mas...
+
+Lesson 43: The 7-Day Reframe Challenge
+  Status: ✅ FULL (5201 chars) ☑️ ✏️
+  Story: ✅ | Reflection: ✅
+  Preview: # The Ultimate Integration Challenge: Living Flexibly  ## Your Final Mission  Take everything you've...
+
+============================================================
+MODULE 4: Social Resilience
+============================================================
+
+Lesson 7: The Psychology of Persistence
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ❌
+  Preview: No content
+
+Lesson 8: Overcoming Setbacks
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ❌
+  Preview: No content
+
+============================================================
+MODULE 5: Stress & Recovery
+============================================================
+
+Lesson 9: Embracing Uncertainty
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ❌
+  Preview: No content
+
+Lesson 10: Adaptive Leadership
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ❌
+  Preview: No content
+
+============================================================
+MODULE 6: Growth Mindset
+============================================================
+
+Lesson 11: Integrating Your Learning
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ❌
+  Preview: No content
+
+Lesson 12: Your Personal Action Plan
+  Status: ❌ EMPTY (0 chars) 
+  Story: ✅ | Reflection: ❌
+  Preview: No content
+
+================================================================================
+SUMMARY STATISTICS
+================================================================================
+
+Total Lessons: 22
+
+Challenge Content Status:
+  ❌ Empty/Null: 8 (36.4%)
+  ⚠️  Placeholder: 0 (0.0%)
+  📝 Minimal (<50 chars): 0 (0.0%)
+  📄 Short (50-500 chars): 1 (4.5%)
+  📋 Medium (500-2000 chars): 4 (18.2%)
+  ✅ Full (>2000 chars): 9 (40.9%)
+
+  🎯 Interactive (has inputs/checkboxes): 10 (45.5%)
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+⚡ URGENT: 8 lessons need challenge content created
+  Priority lessons (empty/placeholder):
+    Module 1: L1, L2
+    Module 4: L7, L8
+    Module 5: L9, L10
+    Module 6: L11, L12
+
+🎯 Only 45.5% of challenges are interactive. Consider adding more engagement!
