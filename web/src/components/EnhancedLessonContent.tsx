@@ -1397,6 +1397,15 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
         return sections
       }
       
+      // Check if this is an empty challenge tab
+      if (type === 'challenge' && (!text || text.trim() === '' || text.trim() === 'null')) {
+        console.log('🎯 Empty challenge detected for lesson:', lessonId)
+        return [{
+          type: 'empty-challenge',
+          content: ''
+        }]
+      }
+      
       // Default: just return the content as text
       console.log('⚠️ DEFAULT HANDLER REACHED for lesson:', lessonId, 'type:', type)
       sections.push({
@@ -1641,6 +1650,51 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
               🚨 Build Your Early Warning System
             </h3>
             <EarlyWarningSystem />
+          </div>
+        )
+      
+      case 'empty-challenge':
+        return (
+          <div key={index} style={{
+            padding: '60px 20px',
+            textAlign: 'center',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: '16px',
+            color: 'white',
+            margin: '20px 0',
+            boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
+          }}>
+            <div style={{
+              fontSize: '48px',
+              marginBottom: '20px'
+            }}>
+              🚀
+            </div>
+            <h2 style={{
+              fontSize: '28px',
+              fontWeight: 'bold',
+              marginBottom: '12px',
+              color: 'white'
+            }}>
+              No Challenge Yet... 
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              opacity: 0.95,
+              maxWidth: '400px',
+              margin: '0 auto',
+              lineHeight: '1.6'
+            }}>
+              LOL, we're keeping it chill for now! 😎<br/>
+              Focus on the reflection - that's where the magic happens ✨
+            </p>
+            <div style={{
+              marginTop: '30px',
+              fontSize: '16px',
+              opacity: 0.9
+            }}>
+              Sometimes the best challenge is no challenge 🧘
+            </div>
           </div>
         )
       
