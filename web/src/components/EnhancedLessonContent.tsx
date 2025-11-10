@@ -103,40 +103,21 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
       
       // MODULE 1: Introduction to Resilience
       
-      // Lesson 1: Overview of Resilience - ID 35
-      if (lessonId === 35) {
-        if (type === 'story') {
-          sections.push({
-            type: 'text',
-            content: text.substring(0, Math.min(500, text.length))
-          })
-          sections.push({ type: 'eq-assessment' })
-          sections.push({
-            type: 'text',
-            content: text.substring(500)
-          })
-        } else {
-          sections.push({ type: 'text', content: text })
-        }
-        return sections
-      }
-      
-      // Lesson 2: Goals of the Course - ID 36
-      if (lessonId === 36) {
-        if (type === 'story') {
-          sections.push({
-            type: 'text',
-            content: text.substring(0, Math.min(600, text.length))
-          })
-          sections.push({ type: 'smart-goals' })
-          sections.push({
-            type: 'text',
-            content: text.substring(600)
-          })
-        } else {
-          sections.push({ type: 'text', content: text })
-        }
-        return sections
+      // Handle Module 1 lessons (1-2) with BasicStyledContent for interactivity
+      if (lessonId === 1 || lessonId === 2) {
+        console.log('🎯 MODULE 1 DETECTED:', {
+          lessonId,
+          type,
+          contentLength: text.length
+        })
+        
+        // Use BasicStyledContent for all tabs to enable interactivity
+        return [{
+          type: 'basic-styled',
+          content: text || '',
+          lessonId: lessonId,
+          tabType: type || 'story'
+        }]
       }
       
       // MODULE 3: Cognitive Flexibility (Lessons 37-43)
