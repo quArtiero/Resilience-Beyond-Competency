@@ -8,7 +8,7 @@ from psycopg2.extras import Json
 import os
 
 # Render PostgreSQL connection with SSL
-DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://resilient_mastery_db_user:hl2Y9gVaIqLfBGVHsgPUlA8KgRpBmPl5@dpg-crqkjoe8ii6s73bsrrrg-a.oregon-postgres.render.com/resilient_mastery_db?sslmode=require')
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://resilience_mastery_db_user:tFjVtiSEfWF5revzf6HBBGX8ot4fYpmf@dpg-d3ogbv3ipnbc73fvsf1g-a.oregon-postgres.render.com/resilience_mastery_db?sslmode=require')
 
 def update_lessons():
     conn = psycopg2.connect(DATABASE_URL)
