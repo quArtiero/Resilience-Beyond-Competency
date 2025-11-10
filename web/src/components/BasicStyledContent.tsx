@@ -165,24 +165,30 @@ export const BasicStyledContent: React.FC<BasicStyledContentProps> = ({ content,
                 placeholder="Type your response..."
                 style={{
                   display: 'inline-block',
-                  margin: '0 6px',
-                  padding: '6px 12px',
-                  minWidth: 200,
+                  margin: '0 8px',
+                  padding: '8px 16px',
+                  minWidth: 240,
                   fontSize: 16,
-                  border: 'none',
-                  borderBottom: '2px solid #10b981',
-                  backgroundColor: '#f0fdf4',
-                  borderRadius: 4,
+                  fontWeight: 500,
+                  border: '2px solid transparent',
+                  borderBottom: '3px solid #667eea',
+                  backgroundColor: '#f8f9ff',
+                  borderRadius: 8,
                   outline: 'none',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 4px rgba(102,126,234,0.1)'
                 }}
                 onFocus={(e) => {
                   e.target.style.backgroundColor = '#ffffff'
-                  e.target.style.borderBottomColor = '#059669'
+                  e.target.style.borderBottomColor = '#764ba2'
+                  e.target.style.boxShadow = '0 4px 12px rgba(118,75,162,0.2)'
+                  e.target.style.transform = 'translateY(-1px)'
                 }}
                 onBlur={(e) => {
-                  e.target.style.backgroundColor = '#f0fdf4'
-                  e.target.style.borderBottomColor = '#10b981'
+                  e.target.style.backgroundColor = '#f8f9ff'
+                  e.target.style.borderBottomColor = '#667eea'
+                  e.target.style.boxShadow = '0 2px 4px rgba(102,126,234,0.1)'
+                  e.target.style.transform = 'translateY(0)'
                 }}
               />
             )
@@ -229,29 +235,36 @@ export const BasicStyledContent: React.FC<BasicStyledContentProps> = ({ content,
           <label key={idx} style={{
             display: 'flex',
             alignItems: 'center',
-            margin: '12px 0',
-            marginLeft: 20,
+            margin: '14px 0',
+            marginLeft: 24,
             cursor: 'pointer',
             fontSize: 16,
-            color: '#374151',
-            padding: 8,
-            borderRadius: 6,
-            backgroundColor: isChecked ? '#f0fdf4' : 'transparent',
-            transition: 'background-color 0.2s'
+            color: '#475569',
+            padding: '12px 16px',
+            borderRadius: 10,
+            backgroundColor: isChecked ? 'rgba(102,126,234,0.08)' : 'rgba(248,249,255,0.5)',
+            border: `2px solid ${isChecked ? '#667eea' : 'transparent'}`,
+            transition: 'all 0.3s',
+            transform: isChecked ? 'translateX(4px)' : 'translateX(0)'
           }}>
             <input
               type="checkbox"
               checked={isChecked}
               onChange={(e) => handleCheckboxChange(checkboxId, e.target.checked)}
               style={{
-                marginRight: 10,
-                width: 18,
-                height: 18,
+                marginRight: 12,
+                width: 20,
+                height: 20,
                 cursor: 'pointer',
-                accentColor: '#10b981'
+                accentColor: '#667eea'
               }}
             />
-            <span style={{ color: isChecked ? '#059669' : '#4b5563' }}>{checkboxText}</span>
+            <span style={{ 
+              color: isChecked ? '#667eea' : '#64748b',
+              fontWeight: isChecked ? 600 : 400,
+              textDecoration: isChecked ? 'line-through' : 'none',
+              textDecorationColor: '#667eea'
+            }}>{checkboxText}</span>
           </label>
         )
         return
@@ -261,12 +274,14 @@ export const BasicStyledContent: React.FC<BasicStyledContentProps> = ({ content,
       if (line.startsWith('# ')) {
         elements.push(
           <h1 key={idx} style={{ 
-            fontSize: 32,
+            fontSize: 36,
             fontWeight: 800,
-            color: '#111827',
+            color: '#1e293b',
             marginTop: 32,
-            marginBottom: 16,
-            lineHeight: 1.2
+            marginBottom: 20,
+            lineHeight: 1.2,
+            borderBottom: '3px solid #667eea',
+            paddingBottom: 12
           }}>
             {line.substring(2)}
           </h1>
@@ -277,12 +292,14 @@ export const BasicStyledContent: React.FC<BasicStyledContentProps> = ({ content,
       if (line.startsWith('## ')) {
         elements.push(
           <h2 key={idx} style={{ 
-            fontSize: 24,
+            fontSize: 28,
             fontWeight: 700,
-            color: '#1f2937',
-            marginTop: 24,
-            marginBottom: 12,
-            lineHeight: 1.3
+            color: '#334155',
+            marginTop: 28,
+            marginBottom: 16,
+            lineHeight: 1.3,
+            borderLeft: '4px solid #764ba2',
+            paddingLeft: 16
           }}>
             {line.substring(3)}
           </h2>
@@ -293,11 +310,11 @@ export const BasicStyledContent: React.FC<BasicStyledContentProps> = ({ content,
       if (line.startsWith('### ')) {
         elements.push(
           <h3 key={idx} style={{ 
-            fontSize: 20,
+            fontSize: 22,
             fontWeight: 600,
-            color: '#374151',
-            marginTop: 20,
-            marginBottom: 10,
+            color: '#475569',
+            marginTop: 24,
+            marginBottom: 12,
             lineHeight: 1.4
           }}>
             {line.substring(4)}
@@ -368,18 +385,25 @@ export const BasicStyledContent: React.FC<BasicStyledContentProps> = ({ content,
       if (line.trim()) {
         const processedLine = line.split(/\*\*(.*?)\*\*/g).map((part, pidx) => {
           if (pidx % 2 === 1) {
-            return <strong key={`bold-${idx}-${pidx}`} style={{ fontWeight: 700, color: '#111827' }}>{part}</strong>
+            return <strong key={`bold-${idx}-${pidx}`} style={{ 
+              fontWeight: 700, 
+              color: '#1e293b',
+              backgroundColor: '#fef3c7',
+              padding: '2px 4px',
+              borderRadius: 3
+            }}>{part}</strong>
           }
           return part
         })
         
         elements.push(
           <p key={idx} style={{
-            fontSize: 16,
-            color: '#4b5563',
-            marginTop: 8,
-            marginBottom: 8,
-            lineHeight: 1.6
+            fontSize: 17,
+            color: '#475569',
+            marginTop: 12,
+            marginBottom: 12,
+            lineHeight: 1.7,
+            letterSpacing: '0.01em'
           }}>
             {processedLine}
           </p>
@@ -393,12 +417,29 @@ export const BasicStyledContent: React.FC<BasicStyledContentProps> = ({ content,
   return (
     <div style={{
       maxWidth: '100%',
-      padding: 24,
+      padding: 32,
       backgroundColor: '#ffffff',
-      borderRadius: 12,
-      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+      borderRadius: 16,
+      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      border: '1px solid #e5e7eb',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      background: 'linear-gradient(to bottom, #ffffff, #fafafa)'
     }}>
+      <div style={{
+        marginBottom: 24,
+        padding: 20,
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        borderRadius: 12,
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <h2 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>
+          Module 3: Cognitive Flexibility
+        </h2>
+        <p style={{ margin: '8px 0 0 0', fontSize: 14, opacity: 0.9 }}>
+          Interactive Learning Experience
+        </p>
+      </div>
       {renderContent()}
     </div>
   )
