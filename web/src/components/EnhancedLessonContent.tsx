@@ -111,7 +111,16 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           contentLength: text.length
         })
         
-        // Use BasicStyledContent for all tabs to enable interactivity
+        // Check if this is an empty challenge first
+        if (type === 'challenge' && (!text || text.trim() === '' || text.trim() === 'null' || text.includes('No content available'))) {
+          console.log('🚀 Empty challenge detected for Module 1 lesson:', lessonId)
+          return [{
+            type: 'empty-challenge',
+            content: ''
+          }]
+        }
+        
+        // Use BasicStyledContent for all other tabs to enable interactivity
         return [{
           type: 'basic-styled',
           content: text || '',
@@ -130,6 +139,15 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
           contentLength: text.length,
           contentPreview: text.substring(0, 100)
         })
+        
+        // Check if this is an empty challenge first (for any Module 3 lesson)
+        if (type === 'challenge' && (!text || text.trim() === '' || text.trim() === 'null' || text.includes('No content available'))) {
+          console.log('🚀 Empty challenge detected for Module 3 lesson:', lessonId)
+          return [{
+            type: 'empty-challenge',
+            content: ''
+          }]
+        }
         
         // Use BasicStyledContent for Lesson 38 (same as other Module 3 lessons)
         if (lessonId === 38) {
