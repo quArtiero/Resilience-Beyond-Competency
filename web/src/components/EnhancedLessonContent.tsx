@@ -1443,6 +1443,15 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
   console.log('📦 Sections parsed:', sections.length, 'sections for lesson:', lessonId, 'type:', type, sections.map(s => s.type))
 
   const renderSection = (section: any, index: number) => {
+    // Debug logging for all components
+    console.log('🎨 renderSection called:', { 
+      type: section.type, 
+      index, 
+      lessonId,
+      hasContent: !!section.content,
+      section
+    })
+    
     // Debug logging for capstone components
     if (section.type && section.type.includes('capstone')) {
       console.log('RENDERING CAPSTONE COMPONENT:', section.type)
@@ -2226,7 +2235,8 @@ export function EnhancedLessonContent({ lessonId, lessonTitle, content, type }: 
   }
 
   // Show what we're about to render
-  if (!content) {
+  // Skip this check if we have sections to render (like empty-challenge)
+  if (!content && sections.length === 0) {
     return <div>No content available</div>
   }
 
