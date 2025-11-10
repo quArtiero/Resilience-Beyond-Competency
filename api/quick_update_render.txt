@@ -1,0 +1,19 @@
+# Quick Update for Render Console
+# Copy and paste this into Render Dashboard → Database → Shell
+
+# Step 1: Connect to database and check lessons
+psql -c "SELECT id, title FROM lesson WHERE id BETWEEN 39 AND 43 ORDER BY id;"
+
+# Step 2: Update Lesson 39 with test content (to verify it works)
+psql -c "UPDATE lesson SET story = '# Barriers & Biases Test\n\nTest content with **bold** and input fields: _____' WHERE id = 39;"
+
+# Step 3: Verify the update
+psql -c "SELECT id, title, LEFT(story::text, 50) as story_preview FROM lesson WHERE id = 39;"
+
+# If the test works, you can:
+# 1. Use the full Python scripts (update_module3_lessons_render.py)
+# 2. Or manually update each lesson with the content from those files
+
+# Note: The full content is in:
+# - api/update_module3_lessons_render.py (lessons 39-40)
+# - api/update_module3_lessons_41_43_render.py (lessons 41-43)
